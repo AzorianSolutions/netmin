@@ -54,7 +54,8 @@
                                     <div class="form-group">
                                         <label for="txtOrgName">Organization Name</label>
                                         <input type="text" class="form-control" id="txtOrgName" name="org_name"
-                                               placeholder="Organization Legal Name" value="{{ account.org_name }}">
+                                               placeholder="Organization Legal Name"
+                                               value="{% if account.org_name %}{{ account.org_name }}{% endif %}">
                                     </div>
                                     <!-- /.form-group -->
 
@@ -67,7 +68,7 @@
                                                 <input type="text" class="form-control" id="txtPrimaryContactName"
                                                        name="primary_contact_name"
                                                        placeholder="Primary Contact Full Name"
-                                                       value="{{ account.primary_contact_name }}">
+                                                       value="{% if account.primary_contact_name %}{{ account.primary_contact_name }}{% endif %}">
                                             </div>
                                             <!-- /.form-group -->
 
@@ -99,7 +100,7 @@
                                                 <input type="text" class="form-control" id="txtSecondaryContactName"
                                                        name="secondary_contact_name"
                                                        placeholder="Secondary Contact Full Name"
-                                                       value="{{ account.secondary_contact_name }}">
+                                                       value="{% if account.secondary_contact_name %}{{ account.secondary_contact_name }}{% endif %}">
                                             </div>
                                             <!-- /.form-group -->
 
@@ -130,7 +131,7 @@
                                     <div class="form-group">
                                         <label for="txtNotes">Notes</label>
                                         <textarea class="form-control" rows="3" id="txtNotes" name="notes"
-                                                  placeholder="Account notes...">{{ account.notes }}</textarea>
+                                                  placeholder="Account notes...">{% if account.notes %}{{ account.notes }}{% endif %}</textarea>
                                     </div>
                                     <!-- /.form-group -->
 
