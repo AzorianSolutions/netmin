@@ -1,12 +1,6 @@
 {% extends 'layout/layout.jinja2' %}
 {% block title %}Settings / Service Packages / Delete Package{% endblock %}
 
-{% block html_head %}
-    <style type="text/css">
-
-    </style>
-{% endblock %}
-
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -114,7 +108,7 @@
 
 {% block footer_scripts %}
     <script type="text/javascript">
-        btnCancel = null
+        let btnCancel = null
 
         let onBtnCancelClick = function (e) {
             window.location = '/settings/service-packages'

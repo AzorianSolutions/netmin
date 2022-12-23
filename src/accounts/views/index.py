@@ -5,7 +5,7 @@ from django.http import HttpRequest
 
 base_uri: str = '/accounts'
 view_directory: str = 'accounts'
-numbers_regex = re.compile(r'^\\d+$')
+numbers_regex = re.compile(r'\d+')
 
 
 def index(request: HttpRequest):
@@ -39,15 +39,18 @@ def edit(request, id: int | None = None):
         }
 
         for field in phone_fields:
-            result: str = ''.join(numbers_regex.findall(request.POST.get(field)))
+            if not (field_value := request.POST.get(field)):
+                continue
+
+            result: str = ''.join(numbers_regex.findall(field_value))
+
             if len(result.strip()) and result.isnumeric():
                 data[field] = int(result)
 
         if isinstance(id, int):
             data['id'] = id
 
-        package = Account(**data)
-        package.save()
+        Account(**data).save()
 
         return redirect(base_uri)
 

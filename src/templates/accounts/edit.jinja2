@@ -1,11 +1,5 @@
 {% extends 'layout/layout.jinja2' %}
-{% block title %}Settings / Service Packages / {% if id %}Edit{% else %}Add{% endif %} Package{% endblock %}
-
-{% block html_head %}
-    <style type="text/css">
-
-    </style>
-{% endblock %}
+{% block title %}Accounts / {% if id %}Edit{% else %}Add{% endif %} Account{% endblock %}
 
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
@@ -15,7 +9,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1><i class="fas fa-gauge-high"></i> {% if id %}Edit{% else %}Add{% endif %} Package</h1>
+                        <h1><i class="fas fa-key"></i> {% if id %}Edit{% else %}Add{% endif %} Account</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -23,12 +17,9 @@
                                 <a href="/">Home</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="/settings">Settings</a>
+                                <a href="/accounts">Accounts</a>
                             </li>
-                            <li class="breadcrumb-item">
-                                <a href="/settings/service-packages">Service Packages</a>
-                            </li>
-                            <li class="breadcrumb-item active">{% if id %}Edit{% else %}Add{% endif %} Package</li>
+                            <li class="breadcrumb-item active">{% if id %}Edit{% else %}Add{% endif %} Account</li>
                         </ol>
                     </div>
                 </div>
@@ -46,7 +37,7 @@
 
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Package Details
+                                    Account Details
                                 </h3>
                                 <div class="card-tools">
                                     <button type="button" title="Cancel" class="btn btn-tool btn-cancel"><i
@@ -61,63 +52,85 @@
                                 <div class="card-body">
 
                                     <div class="form-group">
-                                        <label for="txtLabel">Package Label</label>
-                                        <input type="text" class="form-control" id="txtLabel" name="label"
-                                               placeholder="100 Mbps (DL Mbps / UL Mbps)" value="{{ package.label }}">
+                                        <label for="txtOrgName">Organization Name</label>
+                                        <input type="text" class="form-control" id="txtOrgName" name="org_name"
+                                               placeholder="Organization Legal Name" value="{{ account.org_name }}">
                                     </div>
                                     <!-- /.form-group -->
 
-                                    <div class="form-group">
-                                        <label>Package Technologies</label>
-                                        {% for item in technologies %}
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="chkTechnology{{ loop.index }}"
-                                                   name="technologies" value="{{ item }}"
-                                                    {% if package.technologies is in_list(item) %}
-                                                   checked{% endif %}>
-                                            <label class="form-check-label" for="chkTechnology{{ loop.index }}">{{ technologies[item] }}</label>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                    <!-- /.form-group -->
+                                    <div class="row">
 
-                                    <div class="form-group">
-                                        <label>Package Type</label>
-                                        {% for item in types %}
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" id="radType{{ loop.index }}"
-                                                   name="type" value="{{ item }}"{% if package.type == item %}
-                                                   checked{% endif %}>
-                                            <label class="form-check-label" for="radType{{ loop.index }}">{{ types[item] }}</label>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
+                                        <div class="col col-6">
 
-                                    <div class="form-group">
-                                        <label for="txtDownstream">Downstream Limit</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" id="txtDownstream" name="downstream"
-                                                   class="form-control" placeholder="~ denotes unlimited"
-                                                   value="{{ package.downstream }}">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"> Mbps</span>
+                                            <div class="form-group">
+                                                <label for="txtPrimaryContactName">Primary Contact Name</label>
+                                                <input type="text" class="form-control" id="txtPrimaryContactName"
+                                                       name="primary_contact_name"
+                                                       placeholder="Primary Contact Full Name"
+                                                       value="{{ account.primary_contact_name }}">
                                             </div>
+                                            <!-- /.form-group -->
+
+                                            <div class="form-group">
+                                                <label for="txtPrimaryContactPhone1">Primary Contact Phone 1</label>
+                                                <input type="text" class="form-control" id="txtPrimaryContactPhone1"
+                                                       name="primary_contact_phone1"
+                                                       placeholder="Primary Contact Phone #1"
+                                                       value="{% if account.primary_contact_phone1 %}{{ account.primary_contact_phone1 }}{% endif %}">
+                                            </div>
+                                            <!-- /.form-group -->
+
+                                            <div class="form-group">
+                                                <label for="txtPrimaryContactPhone2">Primary Contact Phone 2</label>
+                                                <input type="text" class="form-control" id="txtPrimaryContactPhone2"
+                                                       name="primary_contact_phone2"
+                                                       placeholder="Primary Contact Phone #2"
+                                                       value="{% if account.primary_contact_phone2 %}{{ account.primary_contact_phone2 }}{% endif %}">
+                                            </div>
+                                            <!-- /.form-group -->
+
                                         </div>
-                                        <!-- /.input-group -->
+                                        <!-- /.col -->
+
+                                        <div class="col col-6">
+
+                                            <div class="form-group">
+                                                <label for="txtSecondaryContactName">Secondary Contact Name</label>
+                                                <input type="text" class="form-control" id="txtSecondaryContactName"
+                                                       name="secondary_contact_name"
+                                                       placeholder="Secondary Contact Full Name"
+                                                       value="{{ account.secondary_contact_name }}">
+                                            </div>
+                                            <!-- /.form-group -->
+
+                                            <div class="form-group">
+                                                <label for="txtSecondaryContactPhone1">Secondary Contact Phone 1</label>
+                                                <input type="text" class="form-control" id="txtSecondaryContactPhone1"
+                                                       name="secondary_contact_phone1"
+                                                       placeholder="Secondary Contact Phone #1"
+                                                       value="{% if account.secondary_contact_phone1 %}{{ account.secondary_contact_phone1 }}{% endif %}">
+                                            </div>
+                                            <!-- /.form-group -->
+
+                                            <div class="form-group">
+                                                <label for="txtSecondaryContactPhone2">Secondary Contact Phone 2</label>
+                                                <input type="text" class="form-control" id="txtSecondaryContactPhone2"
+                                                       name="secondary_contact_phone2"
+                                                       placeholder="Secondary Contact Phone #2"
+                                                       value="{% if account.secondary_contact_phone2 %}{{ account.secondary_contact_phone2 }}{% endif %}">
+                                            </div>
+                                            <!-- /.form-group -->
+
+                                        </div>
+                                        <!-- /.col -->
+
                                     </div>
-                                    <!-- /.form-group -->
+                                    <!-- /.row -->
 
                                     <div class="form-group">
-                                        <label for="txtUpstream">Upstream Limit</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" id="txtUpstream" name="upstream"
-                                                   class="form-control" placeholder="~ denotes unlimited"
-                                                   value="{{ package.upstream }}">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"> Mbps</span>
-                                            </div>
-                                        </div>
-                                        <!-- /.input-group -->
+                                        <label for="txtNotes">Notes</label>
+                                        <textarea class="form-control" rows="3" id="txtNotes" name="notes"
+                                                  placeholder="Account notes...">{{ account.notes }}</textarea>
                                     </div>
                                     <!-- /.form-group -->
 
@@ -126,7 +139,7 @@
 
                                 <div class="card-footer">
                                     <button type="submit" title="{% if id %}Update{% else %}
-                                        Create{% endif %} Package" class="btn btn-primary">{% if id %}Update{% else %}
+                                        Create{% endif %} Account" class="btn btn-primary">{% if id %}Update{% else %}
                                         Create{% endif %}</button>
                                     <button type="button" title="Cancel" class="btn btn-danger float-right btn-cancel">
                                         Cancel
@@ -152,11 +165,15 @@
 
 {% block footer_scripts %}
     <script type="text/javascript">
-        btnCancel = null
-        frmEdit = null
+        let btnCancel = null
+        let frmEdit = null
+
+        let phoneNormalizer = function (value) {
+            return $.trim(value.replace(/\D+/g, ''))
+        }
 
         let onBtnCancelClick = function (e) {
-            window.location = '/settings/service-packages'
+            window.location = '/accounts'
         }
 
         let setupListeners = function () {
@@ -166,37 +183,48 @@
         let setupValidation = function () {
             frmEdit.validate({
                 rules: {
-                    label: {
-                        required: true,
-                        minlength: 5,
-                        maxlength: 100,
-                        label: true,
+                    org_name: {
+                        required: false,
+                        minlength: 3,
+                        maxlength: 30,
                     },
-                    technologies: {
+                    primary_contact_name: {
                         required: true,
+                        minlength: 2,
+                        maxlength: 50,
                     },
-                    type: {
+                    primary_contact_phone1: {
                         required: true,
+                        phoneUS: true,
+                        maxlength: 17,
+                        normalizer: phoneNormalizer,
                     },
-                    downstream: {
-                        required: true,
-                        number: true,
-                        range: [0, 10000],
-                        normalizer: function (value) {
-                            if (value === '~')
-                                value = 0
-                            return $.trim(value)
-                        },
+                    primary_contact_phone2: {
+                        required: false,
+                        phoneUS: true,
+                        maxlength: 17,
+                        normalizer: phoneNormalizer,
                     },
-                    upstream: {
-                        required: true,
-                        number: true,
-                        range: [0, 10000],
-                        normalizer: function (value) {
-                            if (value === '~')
-                                value = 0
-                            return $.trim(value)
-                        },
+                    secondary_contact_name: {
+                        required: false,
+                        minlength: 2,
+                        maxlength: 50,
+                    },
+                    secondary_contact_phone1: {
+                        required: false,
+                        phoneUS: true,
+                        maxlength: 17,
+                        normalizer: phoneNormalizer,
+                    },
+                    secondary_contact_phone2: {
+                        required: false,
+                        phoneUS: true,
+                        maxlength: 17,
+                        normalizer: phoneNormalizer,
+                    },
+                    notes: {
+                        required: false,
+                        maxlength: 3000,
                     },
                 },
                 errorPlacement: function (error, element) {

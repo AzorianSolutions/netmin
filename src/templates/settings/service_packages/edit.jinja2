@@ -1,12 +1,6 @@
 {% extends 'layout/layout.jinja2' %}
 {% block title %}Settings / Service Packages / {% if id %}Edit{% else %}Add{% endif %} Package{% endblock %}
 
-{% block html_head %}
-    <style type="text/css">
-
-    </style>
-{% endblock %}
-
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -70,13 +64,15 @@
                                     <div class="form-group">
                                         <label>Package Technologies</label>
                                         {% for item in technologies %}
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="chkTechnology{{ loop.index }}"
-                                                   name="technologies" value="{{ item }}"
-                                                    {% if package.technologies is in_list(item) %}
-                                                   checked{% endif %}>
-                                            <label class="form-check-label" for="chkTechnology{{ loop.index }}">{{ technologies[item] }}</label>
-                                        </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                       id="chkTechnology{{ loop.index }}"
+                                                       name="technologies" value="{{ item }}"
+                                                        {% if package.technologies is in_list(item) %}
+                                                       checked{% endif %}>
+                                                <label class="form-check-label"
+                                                       for="chkTechnology{{ loop.index }}">{{ technologies[item] }}</label>
+                                            </div>
                                         {% endfor %}
                                     </div>
                                     <!-- /.form-group -->
@@ -84,12 +80,14 @@
                                     <div class="form-group">
                                         <label>Package Type</label>
                                         {% for item in types %}
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" id="radType{{ loop.index }}"
-                                                   name="type" value="{{ item }}"{% if package.type == item %}
-                                                   checked{% endif %}>
-                                            <label class="form-check-label" for="radType{{ loop.index }}">{{ types[item] }}</label>
-                                        </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                       id="radType{{ loop.index }}"
+                                                       name="type" value="{{ item }}"{% if package.type == item %}
+                                                       checked{% endif %}>
+                                                <label class="form-check-label"
+                                                       for="radType{{ loop.index }}">{{ types[item] }}</label>
+                                            </div>
                                         {% endfor %}
                                     </div>
 
@@ -152,8 +150,14 @@
 
 {% block footer_scripts %}
     <script type="text/javascript">
-        btnCancel = null
-        frmEdit = null
+        let btnCancel = null
+        let frmEdit = null
+
+        let speedNormalizer = function (value) {
+            if (value === '~')
+                value = 0
+            return $.trim(value)
+        }
 
         let onBtnCancelClick = function (e) {
             window.location = '/settings/service-packages'
@@ -182,21 +186,13 @@
                         required: true,
                         number: true,
                         range: [0, 10000],
-                        normalizer: function (value) {
-                            if (value === '~')
-                                value = 0
-                            return $.trim(value)
-                        },
+                        normalizer: speedNormalizer,
                     },
                     upstream: {
                         required: true,
                         number: true,
                         range: [0, 10000],
-                        normalizer: function (value) {
-                            if (value === '~')
-                                value = 0
-                            return $.trim(value)
-                        },
+                        normalizer: speedNormalizer,
                     },
                 },
                 errorPlacement: function (error, element) {
