@@ -69,52 +69,28 @@
 
                                     <div class="form-group">
                                         <label>Package Technologies</label>
+                                        {% for item in technologies %}
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="chkTechnologyLFWLL"
-                                                   name="technologies" value="lfwll"
-                                                    {% if package.technologies is in_list('lfwll') %}
+                                            <input class="form-check-input" type="checkbox" id="chkTechnology{{ loop.index }}"
+                                                   name="technologies" value="{{ item }}"
+                                                    {% if package.technologies is in_list(item) %}
                                                    checked{% endif %}>
-                                            <label class="form-check-label" for="chkTechnologyLFWLL">Licensed
-                                                FWLL</label>
+                                            <label class="form-check-label" for="chkTechnology{{ loop.index }}">{{ technologies[item] }}</label>
                                         </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="chkTechnologyUFWLL"
-                                                   name="technologies" value="ufwll"
-                                                    {% if package.technologies is in_list('ufwll') %}
-                                                   checked{% endif %}>
-                                            <label class="form-check-label" for="chkTechnologyUFWLL">Unlicensed
-                                                FWLL</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="chkTechnologyOptical"
-                                                   name="technologies" value="optical"
-                                                    {% if package.technologies is in_list('optical') %}
-                                                   checked{% endif %}>
-                                            <label class="form-check-label" for="chkTechnologyOptical">Optical</label>
-                                        </div>
+                                        {% endfor %}
                                     </div>
                                     <!-- /.form-group -->
 
                                     <div class="form-group">
                                         <label>Package Type</label>
+                                        {% for item in types %}
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" id="radTypeAny"
-                                                   name="type" value="any"{% if package.type == 'any' %}
+                                            <input class="form-check-input" type="radio" id="radType{{ loop.index }}"
+                                                   name="type" value="{{ item }}"{% if package.type == item %}
                                                    checked{% endif %}>
-                                            <label class="form-check-label" for="radTypeAny">Any</label>
+                                            <label class="form-check-label" for="radType{{ loop.index }}">{{ types[item] }}</label>
                                         </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" id="radTypeCommercial"
-                                                   name="type" value="commercial"{% if package.type == 'commercial' %}
-                                                   checked{% endif %}>
-                                            <label class="form-check-label" for="radTypeCommercial">Commercial</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" id="radTypeResidential"
-                                                   name="type" value="residential"{% if package.type == 'residential' %}
-                                                   checked{% endif %}>
-                                            <label class="form-check-label" for="radTypeResidential">Residential</label>
-                                        </div>
+                                        {% endfor %}
                                     </div>
 
                                     <div class="form-group">

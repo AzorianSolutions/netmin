@@ -17,7 +17,7 @@ def index(request: HttpRequest):
     return render(request, os.path.join(view_directory, 'index.jinja2'), params)
 
 
-def add(request: HttpRequest):
+def edit(request, id: int | None = None):
     from django.shortcuts import redirect
     from settings.models import ServicePackage
 
@@ -48,75 +48,21 @@ def add(request: HttpRequest):
             'downstream': downstream,
             'upstream': upstream,
         }
+
+        if isinstance(id, int):
+            data['id'] = id
+
         package = ServicePackage(**data)
         package.save()
 
         return redirect(base_uri)
 
-    package: ServicePackage = ServicePackage()
+    package: ServicePackage
 
-    try:
-        if package.downstream is not None:
-            package.downstream = float(package.downstream) / 1000000
-        if not package.downstream:
-            package.downstream = unlimited_mark
-    except ValueError:
-        package.downstream = unlimited_mark
-
-    try:
-        if package.upstream is not None:
-            package.upstream = float(package.upstream) / 1000000
-        if not package.upstream:
-            package.upstream = unlimited_mark
-    except ValueError:
-        package.upstream = unlimited_mark
-
-    params: dict = {
-        'id': None,
-        'package': package,
-    }
-
-    return render(request, os.path.join(view_directory, 'edit.jinja2'), params)
-
-
-def edit(request, id):
-    from django.shortcuts import redirect
-    from settings.models import ServicePackage
-
-    if request.method == 'POST':
-        technologies: list | str | None = request.POST.getlist('technologies')
-        downstream: float | str | None = request.POST.get('downstream')
-        upstream: float | str | None = request.POST.get('upstream')
-
-        if isinstance(technologies, list):
-            technologies = ','.join(technologies)
-
-        try:
-            downstream = float(downstream)
-            downstream = downstream * 1000000 if downstream > 0 else 0
-        except ValueError:
-            downstream = 0
-
-        try:
-            upstream = float(upstream)
-            upstream = upstream * 1000000 if upstream > 0 else 0
-        except ValueError:
-            upstream = 0
-
-        data: dict = {
-            'id': id,
-            'label': request.POST.get('label'),
-            'technologies': technologies,
-            'type': request.POST.get('type'),
-            'downstream': downstream,
-            'upstream': upstream,
-        }
-        package = ServicePackage(**data)
-        package.save()
-
-        return redirect(base_uri)
-
-    package: ServicePackage = ServicePackage.objects.get(pk=id)
+    if isinstance(id, int) and id:
+        package = ServicePackage.objects.get(pk=id)
+    else:
+        package = ServicePackage()
 
     try:
         if package.downstream is not None:
@@ -137,6 +83,8 @@ def edit(request, id):
     params: dict = {
         'id': id,
         'package': package,
+        'technologies': ServicePackage.TECHNOLOGIES,
+        'types': ServicePackage.TYPES,
     }
 
     return render(request, os.path.join(view_directory, 'edit.jinja2'), params)
@@ -154,6 +102,8 @@ def delete(request, id):
     params: dict = {
         'id': id,
         'package': ServicePackage.objects.get(pk=id),
+        'technologies': ServicePackage.TECHNOLOGIES,
+        'types': ServicePackage.TYPES,
     }
 
     return render(request, os.path.join(view_directory, 'delete.jinja2'), params)
