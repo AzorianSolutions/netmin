@@ -1,0 +1,8 @@
+README.md
+setup.py
+src/netmin.egg-info/PKG-INFO
+src/netmin.egg-info/SOURCES.txt
+src/netmin.egg-info/dependency_links.txt
+src/netmin.egg-info/entry_points.txt
+src/netmin.egg-info/requires.txt
+src/netmin.egg-info/top_level.txt

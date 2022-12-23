@@ -1,0 +1,225 @@
+{% extends 'layout/layout.jinja2' %}
+{% block title %}Events{% endblock %}
+
+{% block html_head %}
+    <style type="text/css">
+        table.messages th:nth-child(0n+1), table.messages th:nth-child(0n+2), table.messages th:nth-child(0n+3),
+        table.messages th:nth-child(0n+4),
+        table.messages td:nth-child(0n+1), table.messages td:nth-child(0n+2), table.messages td:nth-child(0n+3),
+        table.messages td:nth-child(0n+4) {
+            text-align: center;
+        }
+
+        table.messages th:nth-child(0n+1) {
+            width: 50px;
+        }
+
+        table.messages th:nth-child(0n+2) {
+            width: 150px;
+        }
+
+        table.messages th:nth-child(0n+3) {
+            width: 200px;
+        }
+
+        table.messages th:nth-child(0n+4) {
+            width: 50px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Events <i class="nav-icon fas fa-dumpster-fire"></i></h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">Events</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- /.content -->
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-row card-secondary">
+
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Graylog Messages
+                                </h3>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <div class="card-body">
+                                <form action="/events/" method="get">
+                                    <div class="row">
+
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <div class="form-group">
+                                                    <label for="txtSource">Source:</label>
+                                                    <input type="text" class="form-control" id="txtSource" name="s"
+                                                           value="{{ params.s }}"
+                                                           placeholder="Source IPv4 Address">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.col-4 -->
+
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="txtDateFrom">From:</label>
+                                                <div class="input-group date" id="dateFrom"
+                                                     data-target-input="nearest">
+                                                    <input type="text" id="txtDateFrom" name="from"
+                                                           value="{{ params.from }}"
+                                                           class="form-control datetimepicker-input"
+                                                           data-target="#dateFrom">
+                                                    <div class="input-group-append" data-target="#dateFrom"
+                                                         data-toggle="datetimepicker">
+                                                        <div class="input-group-text"><i class="fa fa-calendar"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.col-4 -->
+
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="txtDateTo">To:</label>
+                                                <div class="input-group date" id="dateTo"
+                                                     data-target-input="nearest">
+                                                    <input type="text" id="txtDateTo" name="to"
+                                                           value="{{ params.to }}"
+                                                           class="form-control datetimepicker-input"
+                                                           data-target="#dateTo">
+                                                    <div class="input-group-append" data-target="#dateTo"
+                                                         data-toggle="datetimepicker">
+                                                        <div class="input-group-text"><i class="fa fa-calendar"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.col-4 -->
+
+                                    </div>
+                                    <!-- /.row -->
+
+                                    <div class="row">
+
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <label for="txtMinOccurrences">Minimum Occurrences Within
+                                                    Timeframe:</label>
+                                                <input type="text" class="form-control" id="txtMinOccurrences"
+                                                       name="min" value="{{ params.min }}"
+                                                       placeholder="Minimum occurrences within timeframe">
+                                            </div>
+                                        </div>
+                                        <!-- /.col-3 -->
+
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <label for="selEventType">Event Type</label>
+                                                <select id="selEventType" name="et" class="form-control">
+                                                    {% for type in event_types %}
+                                                        <option value="{{ type.type }}"{% if type.type == params.et %}
+                                                                selected{% endif %}>{{ type.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <!-- /.col-3 -->
+
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <label for="txtLimit">Total Graylog Message Limit:</label>
+                                                <input type="text" class="form-control" id="txtLimit"
+                                                       name="l" value="{{ params.l }}"
+                                                       placeholder="Total message limit from Graylog">
+                                            </div>
+                                        </div>
+                                        <!-- /.col-3 -->
+
+                                        <div class="col-3" style="padding-top: 31px;">
+                                            <button type="submit" id="btnSearch" class="btn btn-secondary">Search</button>
+                                        </div>
+                                        <!-- /.col-3 -->
+
+                                    </div>
+                                    <!-- /.row -->
+
+                                </form>
+
+                                <table class="table table-hover text-nowrap messages expandable-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Index</th>
+                                        <th>Source</th>
+                                        <th>Latest Timestamp</th>
+                                        <th>Total</th>
+                                        <th>Message</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in message_index %}
+                                        <tr>
+                                            <td>{{ loop.index }}</td>
+                                            <td><a href="http://{{ item.source }}"
+                                                   onclick="setSourceIP('{{ item.source }}');return false;">{{ item.source }}</a>
+                                            </td>
+                                            <td>{{ item.latest_ts.strftime('%b %d, %Y @ %I:%M:%S.%f %p') }}</td>
+                                            <td><span class="badge bg-secondary">{{ item.total }}</span></td>
+                                            <td>{{ item.message }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <!-- /.table -->
+
+                            </div>
+                            <!-- /.card-body -->
+
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block footer_scripts %}
+    <script type="text/javascript">
+        let setSourceIP = function (ip) {
+            $('#txtSource').val(ip);
+        };
+
+        $(function () {
+            $('#dateFrom').datetimepicker({icons: {time: 'far fa-clock'}});
+            $('#dateTo').datetimepicker({icons: {time: 'far fa-clock'}});
+        });
+    </script>
+{% endblock %}

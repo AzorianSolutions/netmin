@@ -1,0 +1,5 @@
+label.error { color: red; }
+.content-header h1 > i { font-size: 1.5rem; }
+@media print {
+    table.records th:last-child, table.records td:last-child { display: none; }
+}
