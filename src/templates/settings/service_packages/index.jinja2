@@ -3,15 +3,7 @@
 
 {% block html_head %}
     <style type="text/css">
-        table.records th, table.records td {
-            text-align: center;
-        }
-
-        table.records th:nth-child(0n+1) {
-            width: 75px;
-        }
-
-        table.records th:nth-child(0n+2) {
+        table.records th:nth-child(0n+2), table.records td:nth-child(0n+2) {
             text-align: left;
         }
 
@@ -21,14 +13,6 @@
 
         table.records th:nth-child(0n+4), table.records th:nth-child(0n+5) {
             width: 200px;
-        }
-
-        table.records th:nth-child(0n+6) {
-            width: 75px;
-        }
-
-        table.records td:nth-child(0n+2) {
-            text-align: left;
         }
     </style>
 {% endblock %}
@@ -134,12 +118,13 @@
 
 {% block footer_scripts %}
     <script type="text/javascript">
-        btnAdd = null
-        btnEdit = null
-        btnDelete = null
+        let baseURI = '/settings/service-packages'
+        let btnAdd = null
+        let btnEdit = null
+        let btnDelete = null
 
         let onBtnAddClick = function (e) {
-            window.location = '/settings/service-packages/add'
+            window.location = baseURI + '/add'
         }
 
         let onBtnEditClick = function (e) {
@@ -147,7 +132,7 @@
             if (!target.is('button'))
                 target = target.parents('button')
             let packageId = target.data('id')
-            window.location = '/settings/service-packages/' + packageId + '/edit'
+            window.location = baseURI + '/' + packageId + '/edit'
         }
 
         let onBtnDeleteClick = function (e) {
@@ -155,7 +140,7 @@
             if (!target.is('button'))
                 target = target.parents('button')
             let packageId = target.data('id')
-            window.location = '/settings/service-packages/' + packageId + '/delete'
+            window.location = baseURI + '/' + packageId + '/delete'
         }
 
         let setupListeners = function () {

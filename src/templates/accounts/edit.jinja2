@@ -1,0 +1,215 @@
+{% extends 'layout/layout.jinja2' %}
+{% block title %}Settings / Service Packages / {% if id %}Edit{% else %}Add{% endif %} Package{% endblock %}
+
+{% block html_head %}
+    <style type="text/css">
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><i class="fas fa-gauge-high"></i> {% if id %}Edit{% else %}Add{% endif %} Package</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/settings">Settings</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/settings/service-packages">Service Packages</a>
+                            </li>
+                            <li class="breadcrumb-item active">{% if id %}Edit{% else %}Add{% endif %} Package</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- /.content -->
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-row card-secondary">
+
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Package Details
+                                </h3>
+                                <div class="card-tools">
+                                    <button type="button" title="Cancel" class="btn btn-tool btn-cancel"><i
+                                            class="fas fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <form id="frmEdit" action="" method="post">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+                                <div class="card-body">
+
+                                    <div class="form-group">
+                                        <label for="txtLabel">Package Label</label>
+                                        <input type="text" class="form-control" id="txtLabel" name="label"
+                                               placeholder="100 Mbps (DL Mbps / UL Mbps)" value="{{ package.label }}">
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label>Package Technologies</label>
+                                        {% for item in technologies %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="chkTechnology{{ loop.index }}"
+                                                   name="technologies" value="{{ item }}"
+                                                    {% if package.technologies is in_list(item) %}
+                                                   checked{% endif %}>
+                                            <label class="form-check-label" for="chkTechnology{{ loop.index }}">{{ technologies[item] }}</label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label>Package Type</label>
+                                        {% for item in types %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" id="radType{{ loop.index }}"
+                                                   name="type" value="{{ item }}"{% if package.type == item %}
+                                                   checked{% endif %}>
+                                            <label class="form-check-label" for="radType{{ loop.index }}">{{ types[item] }}</label>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="txtDownstream">Downstream Limit</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" id="txtDownstream" name="downstream"
+                                                   class="form-control" placeholder="~ denotes unlimited"
+                                                   value="{{ package.downstream }}">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"> Mbps</span>
+                                            </div>
+                                        </div>
+                                        <!-- /.input-group -->
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="txtUpstream">Upstream Limit</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" id="txtUpstream" name="upstream"
+                                                   class="form-control" placeholder="~ denotes unlimited"
+                                                   value="{{ package.upstream }}">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"> Mbps</span>
+                                            </div>
+                                        </div>
+                                        <!-- /.input-group -->
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit" title="{% if id %}Update{% else %}
+                                        Create{% endif %} Package" class="btn btn-primary">{% if id %}Update{% else %}
+                                        Create{% endif %}</button>
+                                    <button type="button" title="Cancel" class="btn btn-danger float-right btn-cancel">
+                                        Cancel
+                                    </button>
+                                </div>
+                                <!-- /.card-footer -->
+
+                            </form>
+                            <!-- /form -->
+
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block footer_scripts %}
+    <script type="text/javascript">
+        btnCancel = null
+        frmEdit = null
+
+        let onBtnCancelClick = function (e) {
+            window.location = '/settings/service-packages'
+        }
+
+        let setupListeners = function () {
+            btnCancel.bind('click', onBtnCancelClick)
+        }
+
+        let setupValidation = function () {
+            frmEdit.validate({
+                rules: {
+                    label: {
+                        required: true,
+                        minlength: 5,
+                        maxlength: 100,
+                        label: true,
+                    },
+                    technologies: {
+                        required: true,
+                    },
+                    type: {
+                        required: true,
+                    },
+                    downstream: {
+                        required: true,
+                        number: true,
+                        range: [0, 10000],
+                        normalizer: function (value) {
+                            if (value === '~')
+                                value = 0
+                            return $.trim(value)
+                        },
+                    },
+                    upstream: {
+                        required: true,
+                        number: true,
+                        range: [0, 10000],
+                        normalizer: function (value) {
+                            if (value === '~')
+                                value = 0
+                            return $.trim(value)
+                        },
+                    },
+                },
+                errorPlacement: function (error, element) {
+                    error.appendTo(element.parents('.form-group'))
+                },
+            })
+        }
+
+        $(function () {
+            btnCancel = $('.btn-cancel')
+            frmEdit = $('#frmEdit')
+            setupListeners()
+            setupValidation()
+        })
+    </script>
+{% endblock %}

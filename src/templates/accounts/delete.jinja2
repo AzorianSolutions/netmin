@@ -1,0 +1,132 @@
+{% extends 'layout/layout.jinja2' %}
+{% block title %}Settings / Service Packages / Delete Package{% endblock %}
+
+{% block html_head %}
+    <style type="text/css">
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><i class="fas fa-gauge-high"></i> Delete Package</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/settings">Settings</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/settings/service-packages">Service Packages</a>
+                            </li>
+                            <li class="breadcrumb-item active">Delete Package</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- /.content -->
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-row card-danger">
+
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Delete Service Package
+                                </h3>
+                                <div class="card-tools">
+                                    <button type="button" title="Cancel" class="btn btn-tool btn-cancel"><i
+                                            class="fas fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <form action="" method="post">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+
+                                <div class="card-body">
+                                    <h2>Are you sure?</h2>
+                                    <p>Are you absolutely sure you want to <strong>delete this service package?</strong>
+                                    </p>
+                                    <div class="card card-secondary">
+                                        <div class="card-header">
+                                            <h3 class="card-title">
+                                                <i class="fas fa-text-width"></i>
+                                                {{ package.label }}
+                                            </h3>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <dl class="row">
+                                                <dt class="col-sm-4">Label</dt>
+                                                <dd class="col-sm-8">{{ package.label }}</dd>
+                                                <dt class="col-sm-4">Type</dt>
+                                                <dd class="col-sm-8">{{ package.type }}</dd>
+                                                <dt class="col-sm-4">Technologies</dt>
+                                                <dd class="col-sm-8">{{ package.technologies | replace(',', ', ') }}</dd>
+                                                <dt class="col-sm-4">Limits</dt>
+                                                <dd class="col-sm-8">
+                                                    {% if package.downstream is float and package.downstream is gt 0 %}{{ package.downstream / 1000000 }} Mbps{% else %}~{% endif %}
+                                                / {% if package.upstream is float and package.upstream is gt 0 %}{{ package.upstream / 1000000 }} Mbps{% else %}~{% endif %}
+                                                </dd>
+                                            </dl>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit" title="Delete Package" class="btn btn-danger">Delete Package</button>
+                                    <button type="button" title="Cancel" class="btn btn-primary btn-cancel float-right">Cancel</button>
+                                </div>
+                                <!-- /.card-footer -->
+
+                            </form>
+
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block footer_scripts %}
+    <script type="text/javascript">
+        btnCancel = null
+
+        let onBtnCancelClick = function (e) {
+            window.location = '/settings/service-packages'
+        }
+
+        let setupListeners = function () {
+            btnCancel.bind('click', onBtnCancelClick)
+        }
+
+        $(function () {
+            btnCancel = $('.btn-cancel')
+            setupListeners()
+        })
+    </script>
+{% endblock %}
