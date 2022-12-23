@@ -52,8 +52,7 @@ def edit(request, id: int | None = None):
         if isinstance(id, int):
             data['id'] = id
 
-        package = ServicePackage(**data)
-        package.save()
+        ServicePackage(**data).save()
 
         return redirect(base_uri)
 

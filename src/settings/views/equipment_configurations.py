@@ -63,8 +63,7 @@ def edit(request, id: int | None = None):
         if isinstance(id, int):
             data['id'] = id
 
-        configuration = EquipmentConfiguration(**data)
-        configuration.save()
+        EquipmentConfiguration(**data).save()
 
         return redirect(base_uri)
 
