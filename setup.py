@@ -16,7 +16,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'netmin = lib.cli.app:cli',
+            'netmin = netmin.lib.cli.app:cli',
         ],
     },
 )

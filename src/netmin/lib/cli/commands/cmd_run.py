@@ -1,5 +1,5 @@
 import click
-from lib.cli.app import pass_environment
+from netmin.lib.cli.app import pass_environment
 
 
 @click.command("run", short_help="Run the application in development mode.")

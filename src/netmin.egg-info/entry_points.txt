@@ -1,3 +1,3 @@
 [console_scripts]
-netmin = lib.cli.app:cli
+netmin = netmin.lib.cli.app:cli
 

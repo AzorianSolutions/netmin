@@ -40,7 +40,7 @@ class AsCli(click.MultiCommand):
         import importlib
         name = name.lower()
         try:
-            mod = importlib.import_module(f'lib.cli.commands.cmd_{name}')
+            mod = importlib.import_module(f'netmin.lib.cli.commands.cmd_{name}')
         except ImportError:
             return
         return mod.cli
