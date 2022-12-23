@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
             name='ServicePackage',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.CharField(max_length=50)),
+                ('label', models.CharField(max_length=100)),
                 ('technologies', models.CharField(max_length=255)),
                 ('type', models.CharField(max_length=20)),
                 ('downstream', models.FloatField()),
