@@ -12,8 +12,8 @@ def index(request: HttpRequest):
     from accounts.models import Account
 
     params: dict = {
-        'accounts': Account.objects.all().order_by('primary_contact_name', 'secondary_contact_name', 'org_name',
-                                                   'notes'),
+        'records': Account.objects.all().order_by('primary_contact_name', 'secondary_contact_name', 'org_name',
+                                                  'notes'),
     }
 
     return render(request, os.path.join(view_directory, 'index.jinja2'), params)
@@ -21,7 +21,7 @@ def index(request: HttpRequest):
 
 def edit(request, id: int | None = None):
     from django.shortcuts import redirect
-    from accounts.models import Account
+    from accounts.models import Account, AccountSubscription, AccountEquipment, AccountLocation
 
     if request.method == 'POST':
         phone_fields: list = [
@@ -60,10 +60,13 @@ def edit(request, id: int | None = None):
         account = Account.objects.get(pk=id)
     else:
         account = Account()
-        
+
     params: dict = {
         'id': id,
-        'account': account,
+        'record': account,
+        'locations': AccountLocation.objects.filter(account_id=id),
+        'equipment': AccountEquipment.objects.filter(account_id=id),
+        'subscriptions': AccountSubscription.objects.filter(account_id=id),
     }
 
     return render(request, os.path.join(view_directory, 'edit.jinja2'), params)

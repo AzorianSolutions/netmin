@@ -44,7 +44,7 @@ class AccountEquipment(models.Model):
     }
 
 
-class AccountEquipmentPackage(models.Model):
+class AccountSubscription(models.Model):
     account_id = models.IntegerField()
     equipment_id = models.IntegerField()
     package_id = models.IntegerField()
