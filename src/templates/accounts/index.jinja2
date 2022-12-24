@@ -112,17 +112,13 @@
         }
 
         let onBtnEditClick = function (e) {
-            let target = $(e.target)
-            if (!target.is('button'))
-                target = target.parents('button')
+            let target = getRootElement(e, 'button')
             let accountId = target.data('id')
             window.location = baseURI + '/' + accountId + '/edit'
         }
 
         let onBtnDeleteClick = function (e) {
-            let target = $(e.target)
-            if (!target.is('button'))
-                target = target.parents('button')
+            let target = getRootElement(e, 'button')
             let accountId = target.data('id')
             window.location = baseURI + '/' + accountId + '/delete'
         }
@@ -134,7 +130,7 @@
         }
 
         let setupDataTables = function () {
-            $("table.records").DataTable({
+            $("#records").DataTable({
                 "responsive": true, "lengthChange": false, "autoWidth": false,
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#records_wrapper .col-md-6:eq(0)');
