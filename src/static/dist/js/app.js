@@ -6,6 +6,18 @@ jQuery.validator.addMethod("zipcode", function (value, element) {
     return this.optional(element) || /^\d{5}(?:-\d{4})?$/.test(value);
 }, "Please provide a valid zipcode.");
 
+jQuery.validator.addMethod("macaddress", function (value, element) {
+    return this.optional(element) || /^([0-9A-F]{2}[:-]?){5}([0-9A-F]{2})$/i.test(value);
+}, "Please provide a valid MAC address.");
+
+let numberOnlyNormalizer = function (value) {
+    return $.trim(value.replace(/\D+/g, ''))
+}
+
+let alphaNumericOnlyNormalizer = function (value) {
+    return $.trim(value.replace(/[^a-z0-9]+/gi, ''))
+}
+
 let getRootElement = function (el, selector) {
     el = $(el)
     if (!el.is(selector))

@@ -374,10 +374,6 @@
         let btnDelete = null
         let frmEdit = null
 
-        let phoneNormalizer = function (value) {
-            return $.trim(value.replace(/\D+/g, ''))
-        }
-
         let getURIComponent = function (element) {
             let el = getRootElement(element, 'button')
             let path = ''
@@ -458,13 +454,13 @@
                         required: true,
                         phoneUS: true,
                         maxlength: 17,
-                        normalizer: phoneNormalizer,
+                        normalizer: numberOnlyNormalizer,
                     },
                     primary_contact_phone2: {
                         required: false,
                         phoneUS: true,
                         maxlength: 17,
-                        normalizer: phoneNormalizer,
+                        normalizer: numberOnlyNormalizer,
                     },
                     secondary_contact_name: {
                         required: false,
@@ -475,13 +471,13 @@
                         required: false,
                         phoneUS: true,
                         maxlength: 17,
-                        normalizer: phoneNormalizer,
+                        normalizer: numberOnlyNormalizer,
                     },
                     secondary_contact_phone2: {
                         required: false,
                         phoneUS: true,
                         maxlength: 17,
-                        normalizer: phoneNormalizer,
+                        normalizer: numberOnlyNormalizer,
                     },
                     notes: {
                         required: false,

@@ -1,11 +1,12 @@
 import os
+import re
 from django.shortcuts import redirect, render
 from django.http import HttpRequest
-from accounts.models import Account, AccountEquipment
+from accounts.models import Account, AccountLocation, AccountEquipment
 
 base_uri: str = '/accounts'
 view_directory: str = os.path.join('accounts', os.path.basename(__file__).split(".")[0].replace('_', '-'))
-
+mac_address_regex = re.compile(f'[a-fA-F0-9]')
 
 def edit(request: HttpRequest, account_id: int, id: int | None = None):
     if request.method == 'POST':
@@ -14,7 +15,7 @@ def edit(request: HttpRequest, account_id: int, id: int | None = None):
             'location_id': request.POST.get('location_id'),
             'label': request.POST.get('label'),
             'type': request.POST.get('type'),
-            'mac_address': request.POST.get('mac_address'),
+            'mac_address': ''.join(mac_address_regex.findall(request.POST.get('mac_address'))).upper(),
             'serial_number': request.POST.get('serial_number'),
         }
 
@@ -36,6 +37,7 @@ def edit(request: HttpRequest, account_id: int, id: int | None = None):
         'id': id,
         'account_id': account_id,
         'record': record,
+        'locations': AccountLocation.objects.filter(account_id=account_id),
     }
 
     return render(request, os.path.join(view_directory, 'edit.jinja2'), params)
