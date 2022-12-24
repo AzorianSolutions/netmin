@@ -237,9 +237,7 @@
                         maxlength: 2,
                     },
                 },
-                errorPlacement: function (error, element) {
-                    error.appendTo(element.parents('.form-group'))
-                },
+                errorPlacement: validateErrorPlacement,
             })
         }
 

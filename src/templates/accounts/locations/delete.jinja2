@@ -61,84 +61,50 @@
                                         <div class="card-header">
                                             <h3 class="card-title">{{ record.label }}</h3>
                                         </div>
+                                        <!-- /.card-header -->
 
                                         <div class="card-body">
                                             <dl class="row">
-                                                <div class="col col-12">
-                                                    <dt class="col-sm-4">Organizataion Name</dt>
-                                                    <dd class="col-sm-8">
-                                                        {% if record.org_name %}
-                                                            {{ record.org_name }}
-                                                        {% else %}
-                                                            None
-                                                        {% endif %}
-                                                    </dd>
+                                                <div class="col col-6">
+                                                    <dt class="col-sm-4">Label</dt>
+                                                    <dd class="col-sm-8">{{ record.label }}</dd>
+                                                </div>
+                                                <div class="col col-6">
+                                                    <dt class="col-sm-4">Type</dt>
+                                                    <dd class="col-sm-8">{{ record.type }}</dd>
                                                 </div>
                                             </dl>
                                             <dl class="row">
-
                                                 <div class="col col-6">
-                                                    <dt class="col-sm-4">Primary Contact Name</dt>
-                                                    <dd class="col-sm-8">
-                                                        {% if record.primary_contact_name %}
-                                                            {{ record.primary_contact_name }}
-                                                        {% else %}
-                                                            None
-                                                        {% endif %}
-                                                    </dd>
-                                                    <dt class="col-sm-4">Primary Contact Phone #1</dt>
-                                                    <dd class="col-sm-8">
-                                                        {% if record.primary_contact_phone1 %}
-                                                            {{ record.primary_contact_phone1 }}
-                                                        {% else %}
-                                                            None
-                                                        {% endif %}
-                                                    </dd>
-                                                    <dt class="col-sm-4">Primary Contact Phone #2</dt>
-                                                    <dd class="col-sm-8">
-                                                        {% if record.primary_contact_phone2 %}
-                                                            {{ record.primary_contact_phone2 }}
-                                                        {% else %}
-                                                            None
-                                                        {% endif %}
-                                                    </dd>
+                                                    <dt class="col-sm-4">Street Address Line 1</dt>
+                                                    <dd class="col-sm-8">{{ record.address_line1 }}</dd>
                                                 </div>
-
                                                 <div class="col col-6">
-                                                    <dt class="col-sm-4">Secondary Contact Name</dt>
-                                                    <dd class="col-sm-8">
-                                                        {% if record.secondary_contact_name %}
-                                                            {{ record.secondary_contact_name }}
-                                                        {% else %}
-                                                            None
-                                                        {% endif %}
-                                                    </dd>
-                                                    <dt class="col-sm-4">Secondary Contact Phone #1</dt>
-                                                    <dd class="col-sm-8">
-                                                        {% if record.secondary_contact_phone1 %}
-                                                            {{ record.secondary_contact_phone1 }}
-                                                        {% else %}
-                                                            None
-                                                        {% endif %}
-                                                    </dd>
-                                                    <dt class="col-sm-4">Secondary Contact Phone #2</dt>
-                                                    <dd class="col-sm-8">
-                                                        {% if record.secondary_contact_phone2 %}
-                                                            {{ record.secondary_contact_phone2 }}
-                                                        {% else %}
-                                                            None
-                                                        {% endif %}
-                                                    </dd>
+                                                    <dt class="col-sm-4">Street Address Line 2</dt>
+                                                    <dd class="col-sm-8">{% if record.address_line2 %}{{ record.address_line2 }}{% else %}None{% endif %}</dd>
                                                 </div>
-
                                             </dl>
                                             <dl class="row">
-                                                <div class="col col-12">
-                                                    <dt class="col-sm-4">Notes</dt>
-                                                    <dd class="col-sm-8">{% if record.notes %}{{ record.notes }}{% else %}None{% endif %}</dd>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">City</dt>
+                                                    <dd class="col-sm-8">{{ record.address_city }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">State</dt>
+                                                    <dd class="col-sm-8">{{ record.address_state }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Postal Code</dt>
+                                                    <dd class="col-sm-8">{{ record.address_postal_code }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Country</dt>
+                                                    <dd class="col-sm-8">{{ record.address_country }}</dd>
                                                 </div>
                                             </dl>
+
                                         </div>
+                                        <!-- /.card-body -->
 
                                     </div>
                                 </div>

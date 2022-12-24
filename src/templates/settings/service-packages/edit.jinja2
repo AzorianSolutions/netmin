@@ -196,9 +196,7 @@
                         normalizer: speedNormalizer,
                     },
                 },
-                errorPlacement: function (error, element) {
-                    error.appendTo(element.parents('.form-group'))
-                },
+                errorPlacement: validateErrorPlacement,
             })
         }
 

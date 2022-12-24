@@ -488,9 +488,7 @@
                         maxlength: 3000,
                     },
                 },
-                errorPlacement: function (error, element) {
-                    error.appendTo(element.parents('.form-group'))
-                },
+                errorPlacement: validateErrorPlacement,
             })
         }
 

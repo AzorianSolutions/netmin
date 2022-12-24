@@ -73,7 +73,7 @@ def delete(request, id: int):
 
     params: dict = {
         'id': id,
-        'account': Account.objects.get(pk=id),
+        'record': Account.objects.get(pk=id),
     }
 
     return render(request, os.path.join(view_directory, 'delete.jinja2'), params)
