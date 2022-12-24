@@ -29,7 +29,7 @@
             <div class="container-fluid">
 
                 <div class="row">
-                    <div class="col-12 col-sm-6 col-md-3">
+                    <div class="col-12 col-sm-4 col-md-4">
                         <div class="info-box">
                             <span class="info-box-icon bg-primary elevation-1">
                                 <i class="fas fa-key"></i>
@@ -38,12 +38,10 @@
                                 <span class="info-box-text">Total Accounts</span>
                                 <span class="info-box-number">{{ total_accounts }}</span>
                             </div>
-
                         </div>
-
                     </div>
 
-                    <div class="col-12 col-sm-6 col-md-3">
+                    <div class="col-12 col-sm-4 col-md-4">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-primary elevation-1">
                                 <i class="fas fa-location-dot"></i>
@@ -52,14 +50,10 @@
                                 <span class="info-box-text">Total Locations</span>
                                 <span class="info-box-number">{{ total_locations }}</span>
                             </div>
-
                         </div>
-
                     </div>
 
-
-                    <div class="clearfix hidden-md-up"></div>
-                    <div class="col-12 col-sm-6 col-md-3">
+                    <div class="col-12 col-sm-4 col-md-4">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-primary elevation-1">
                                 <i class="fas fa-walkie-talkie"></i>
@@ -68,25 +62,83 @@
                                 <span class="info-box-text">Total Equipment</span>
                                 <span class="info-box-number">{{ total_equipment }}</span>
                             </div>
-
                         </div>
-
                     </div>
 
-                    <div class="col-12 col-sm-6 col-md-3">
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-2">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-primary elevation-1">
                                 <i class="fas fa-gauge-high"></i>
                             </span>
                             <div class="info-box-content">
-                                <span class="info-box-text">Total Subscriptions</span>
+                                <span class="info-box-text">All Subscriptions</span>
                                 <span class="info-box-number">{{ total_subscriptions }}</span>
                             </div>
-
                         </div>
-
                     </div>
 
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-primary elevation-1">
+                                <i class="fas fa-gauge-high"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Active</span>
+                                <span class="info-box-number">{{ total_subscriptions_active }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-primary elevation-1">
+                                <i class="fas fa-gauge-high"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Canceled</span>
+                                <span class="info-box-number">{{ total_subscriptions_canceled }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-primary elevation-1">
+                                <i class="fas fa-gauge-high"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Paused</span>
+                                <span class="info-box-number">{{ total_subscriptions_paused }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-primary elevation-1">
+                                <i class="fas fa-gauge-high"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Pending</span>
+                                <span class="info-box-number">{{ total_subscriptions_pending }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-primary elevation-1">
+                                <i class="fas fa-gauge-high"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Delinquent</span>
+                                <span class="info-box-number">{{ total_subscriptions_delinquent }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -94,7 +146,7 @@
                         <div class="card card-row card-primary">
 
                             <div class="card-header">
-                                <h3 class="card-title">Service Package Breakdown</h3>
+                                <h3 class="card-title">Active Subscription Breakdown</h3>
                             </div>
                             <!-- /.card-header -->
 
@@ -103,7 +155,7 @@
                                 <div class="progress-group mb-4">
                                     {{ package.label }}
                                     <span class="float-right">
-                                        <b>{{ package['total'] }}</b>/{{ total_subscriptions }}</span>
+                                        <b>{{ package['total'] }}</b>/{{ total_subscriptions_active }}</span>
                                     <div class="progress progress-sm">
                                         <div class="progress-bar bg-success" style="width: {{ package['share'] }}%"></div>
                                     </div>

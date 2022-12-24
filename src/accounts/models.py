@@ -79,20 +79,20 @@ class AccountSubscription(models.Model):
 
     @property
     def ipv4_static(self):
-        if self.ipv4_address is not None:
+        if self.ipv4_address is not None and len(str(self.ipv4_address)):
             return self.ipv4_address
 
-        if self.ipv4_pool is not None:
+        if self.ipv4_pool is not None and len(str(self.ipv4_pool)):
             return self.ipv4_pool
 
         return 'None'
 
     @property
     def ipv6_static(self):
-        if self.ipv6_prefix is not None:
+        if self.ipv6_prefix is not None and len(str(self.ipv6_prefix)):
             return self.ipv6_prefix
 
-        if self.ipv6_pool is not None:
+        if self.ipv6_pool is not None and len(str(self.ipv6_pool)):
             return self.ipv6_pool
 
         return 'None'
