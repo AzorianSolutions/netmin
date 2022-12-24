@@ -91,7 +91,7 @@
                                         <label for="txtLeaseTime">Lease Time</label>
                                         <div class="input-group mb-3">
                                             <input type="text" id="txtLeaseTime" name="lease_time"
-                                                   class="form-control" placeholder="84600"
+                                                   class="form-control" placeholder="86400"
                                                    value="{{ record.lease_time | no_value }}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">seconds</span>
@@ -205,28 +205,51 @@
         let setupValidation = function () {
             frmEdit.validate({
                 rules: {
-                    location_id: {
+                    equipment_id: {
                         required: true,
                     },
-                    label: {
-                        required: true,
-                        minlength: 1,
-                        maxlength: 100,
-                        label: true,
-                    },
-                    type: {
+                    package_id: {
                         required: true,
                     },
-                    mac_address: {
+                    status: {
                         required: true,
-                        minlength: 12,
-                        maxlength: 17,
-                        macaddress: true,
-                        normalizer: alphaNumericOnlyNormalizer,
                     },
-                    serial_number: {
+                    lease_time: {
                         required: false,
-                        maxlength: 30,
+                        number: true,
+                        range: [30, 604800],
+                    },
+                    ipv4_address: {
+                        required: false,
+                        ipv4address: true,
+                        maxlength: 39,
+                    },
+                    ipv4_pool: {
+                        required: false,
+                        maxlength: 50,
+                    },
+                    ipv6_prefix: {
+                        required: false,
+                        maxlength: 39,
+                        ipv6prefix: true,
+                    },
+                    ipv6_pool: {
+                        required: false,
+                        maxlength: 50,
+                    },
+                    routes: {
+                        required: false,
+                        maxlength: 1000,
+                    },
+                    username: {
+                        required: false,
+                        minlength: 3,
+                        maxlength: 50,
+                    },
+                    password: {
+                        required: false,
+                        minlength: 8,
+                        maxlength: 50,
                     },
                 },
                 errorPlacement: validateErrorPlacement,
