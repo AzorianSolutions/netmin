@@ -12,6 +12,10 @@ class Account(models.Model):
     secondary_contact_phone2 = models.IntegerField(null=True)
     notes = models.TextField()
 
+    @property
+    def label(self):
+        return self.org_name if self.org_name is not None and len(str(self.org_name)) else self.primary_contact_name
+
 
 class AccountLocation(models.Model):
     label = models.CharField(max_length=100)

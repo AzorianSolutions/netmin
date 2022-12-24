@@ -363,7 +363,8 @@
 
 {% block footer_scripts %}
     <script type="text/javascript">
-        let baseURI = '/accounts/{{ id }}'
+        let baseURI = '/accounts'
+        let accountURI = baseURI + '/{{ id }}'
         let btnCancel = null
         let btnAdd = null
         let btnEdit = null
@@ -395,19 +396,19 @@
         }
 
         let onBtnAddClick = function (e) {
-            window.location = baseURI + getURIComponent(e.target) + '/add'
+            window.location = accountURI + getURIComponent(e.target) + '/add'
         }
 
         let onBtnEditClick = function (e) {
             let target = getRootElement(e.target, 'button')
             let recordId = target.data('id')
-            window.location = baseURI + getURIComponent(target) + '/' + recordId + '/edit'
+            window.location = accountURI + getURIComponent(target) + '/' + recordId + '/edit'
         }
 
         let onBtnDeleteClick = function (e) {
             let target = getRootElement(e.target, 'button')
             let recordId = target.data('id')
-            window.location = baseURI + getURIComponent(target) + '/' + recordId + '/delete'
+            window.location = accountURI + getURIComponent(target) + '/' + recordId + '/delete'
         }
 
         let setupListeners = function () {

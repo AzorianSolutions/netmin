@@ -2,7 +2,7 @@ import os
 from django.shortcuts import render
 from django.http import HttpRequest
 
-view_directory: str = os.path.join('accounts', os.path.basename(__file__).split(".")[0])
+view_directory: str = os.path.join('accounts', os.path.basename(__file__).split(".")[0].replace('_', '-'))
 
 
 def edit(request: HttpRequest, account_id: int, id: int | None = None):

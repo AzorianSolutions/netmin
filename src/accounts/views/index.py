@@ -1,6 +1,6 @@
 import os
 import re
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpRequest
 
 base_uri: str = '/accounts'
@@ -20,7 +20,6 @@ def index(request: HttpRequest):
 
 
 def edit(request, id: int | None = None):
-    from django.shortcuts import redirect
     from accounts.models import Account, AccountSubscription, AccountEquipment, AccountLocation
 
     if request.method == 'POST':
@@ -54,16 +53,9 @@ def edit(request, id: int | None = None):
 
         return redirect(base_uri)
 
-    account: Account
-
-    if isinstance(id, int) and id:
-        account = Account.objects.get(pk=id)
-    else:
-        account = Account()
-
     params: dict = {
         'id': id,
-        'record': account,
+        'record': Account.objects.get(pk=id) if id else Account(),
         'locations': AccountLocation.objects.filter(account_id=id),
         'equipment': AccountEquipment.objects.filter(account_id=id),
         'subscriptions': AccountSubscription.objects.filter(account_id=id),
@@ -73,12 +65,10 @@ def edit(request, id: int | None = None):
 
 
 def delete(request, id: int):
-    from django.shortcuts import redirect
     from accounts.models import Account
 
     if request.method == 'POST':
         Account.objects.get(pk=id).delete()
-
         return redirect(base_uri)
 
     params: dict = {
