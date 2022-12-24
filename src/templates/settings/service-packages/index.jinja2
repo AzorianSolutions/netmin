@@ -76,22 +76,22 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for package in packages %}
+                                    {% for record in records %}
                                         <tr>
-                                            <td>{{ package.id }}</td>
-                                            <td>{{ package.label }}</td>
-                                            <td>{{ package.type }}</td>
-                                            <td>{{ package.technologies | replace(',', ', ') }}</td>
-                                            <td>{% if package.downstream is float and package.downstream is gt 0 %}
-                                                {{ package.downstream / 1000000 }} Mbps{% else %}~{% endif %}
-                                                / {% if package.upstream is float and package.upstream is gt 0 %}
-                                                    {{ package.upstream / 1000000 }} Mbps{% else %}~{% endif %}
+                                            <td>{{ record.id }}</td>
+                                            <td>{{ record.label }}</td>
+                                            <td>{{ record.type }}</td>
+                                            <td>{{ record.technologies | replace(',', ', ') }}</td>
+                                            <td>{% if record.downstream is float and record.downstream is gt 0 %}
+                                                {{ record.downstream / 1000000 }} Mbps{% else %}~{% endif %}
+                                                / {% if record.upstream is float and record.upstream is gt 0 %}
+                                                    {{ record.upstream / 1000000 }} Mbps{% else %}~{% endif %}
                                             </td>
                                             <td>
-                                                <button type="button" title="Edit Package" data-id="{{ package.id }}"
+                                                <button type="button" title="Edit Package" data-id="{{ record.id }}"
                                                         class="btn btn-default btn-outline-secondary btn-sm btn-edit"><i
                                                         class="fa fa-edit"></i></button>
-                                                <button type="button" title="Delete Package" data-id="{{ package.id }}"
+                                                <button type="button" title="Delete Package" data-id="{{ record.id }}"
                                                         class="btn btn-default btn-outline-secondary btn-sm btn-delete">
                                                     <i
                                                             class="fa fa-trash"></i></button>
@@ -128,19 +128,13 @@
         }
 
         let onBtnEditClick = function (e) {
-            let target = $(e.target)
-            if (!target.is('button'))
-                target = target.parents('button')
-            let packageId = target.data('id')
-            window.location = baseURI + '/' + packageId + '/edit'
+            let recordId = getRootElement(e.target, 'button').data('id')
+            window.location = baseURI + '/' + recordId + '/edit'
         }
 
         let onBtnDeleteClick = function (e) {
-            let target = $(e.target)
-            if (!target.is('button'))
-                target = target.parents('button')
-            let packageId = target.data('id')
-            window.location = baseURI + '/' + packageId + '/delete'
+            let recordId = getRootElement(e.target, 'button').data('id')
+            window.location = baseURI + '/' + recordId + '/delete'
         }
 
         let setupListeners = function () {

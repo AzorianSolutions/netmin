@@ -10,7 +10,7 @@ def index(request: HttpRequest):
     from settings.models import EquipmentConfiguration
 
     params: dict = {
-        'configurations': EquipmentConfiguration.objects.all().order_by('label', 'frequency_band'),
+        'records': EquipmentConfiguration.objects.all().order_by('label', 'frequency_band'),
         'frequency_bands': EquipmentConfiguration.FREQUENCY_BANDS,
     }
 
@@ -76,7 +76,7 @@ def edit(request, id: int | None = None):
 
     params: dict = {
         'id': id,
-        'configuration': configuration,
+        'record': configuration,
         'frequency_bands': EquipmentConfiguration.FREQUENCY_BANDS,
     }
 
@@ -94,7 +94,7 @@ def delete(request, id: int):
 
     params: dict = {
         'id': id,
-        'configuration': EquipmentConfiguration.objects.get(pk=id),
+        'record': EquipmentConfiguration.objects.get(pk=id),
     }
 
     return render(request, os.path.join(view_directory, 'delete.jinja2'), params)

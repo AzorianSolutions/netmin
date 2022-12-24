@@ -60,22 +60,22 @@
                                     <div class="card card-secondary">
                                         <div class="card-header">
                                             <h3 class="card-title">
-                                                {{ package.label }}
+                                                {{ record.label }}
                                             </h3>
                                         </div>
 
                                         <div class="card-body">
                                             <dl class="row">
                                                 <dt class="col-sm-4">Label</dt>
-                                                <dd class="col-sm-8">{{ package.label }}</dd>
+                                                <dd class="col-sm-8">{{ record.label }}</dd>
                                                 <dt class="col-sm-4">Type</dt>
-                                                <dd class="col-sm-8">{{ package.type }}</dd>
+                                                <dd class="col-sm-8">{{ record.type }}</dd>
                                                 <dt class="col-sm-4">Technologies</dt>
-                                                <dd class="col-sm-8">{{ package.technologies | replace(',', ', ') }}</dd>
+                                                <dd class="col-sm-8">{{ record.technologies | replace(',', ', ') }}</dd>
                                                 <dt class="col-sm-4">Limits</dt>
                                                 <dd class="col-sm-8">
-                                                    {% if package.downstream is float and package.downstream is gt 0 %}{{ package.downstream / 1000000 }} Mbps{% else %}~{% endif %}
-                                                / {% if package.upstream is float and package.upstream is gt 0 %}{{ package.upstream / 1000000 }} Mbps{% else %}~{% endif %}
+                                                    {% if record.downstream is float and record.downstream is gt 0 %}{{ record.downstream / 1000000 }} Mbps{% else %}~{% endif %}
+                                                / {% if record.upstream is float and record.upstream is gt 0 %}{{ record.upstream / 1000000 }} Mbps{% else %}~{% endif %}
                                                 </dd>
                                             </dl>
                                         </div>
@@ -107,10 +107,11 @@
 
 {% block footer_scripts %}
     <script type="text/javascript">
+        let baseURI = '/settings/service-packages'
         let btnCancel = null
 
         let onBtnCancelClick = function (e) {
-            window.location = '/settings/service-packages'
+            window.location = baseURI
         }
 
         let setupListeners = function () {

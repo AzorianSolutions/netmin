@@ -60,24 +60,24 @@
                                     <div class="card card-secondary">
                                         <div class="card-header">
                                             <h3 class="card-title">
-                                                {{ configuration.label }}
+                                                {{ record.label }}
                                             </h3>
                                         </div>
 
                                         <div class="card-body">
                                             <dl class="row">
                                                 <dt class="col-sm-4">Label</dt>
-                                                <dd class="col-sm-8">{{ configuration.label }}</dd>
+                                                <dd class="col-sm-8">{{ record.label }}</dd>
                                                 <dt class="col-sm-4">Frequency Band</dt>
-                                                <dd class="col-sm-8">{{ configuration.frequency_band }}</dd>
+                                                <dd class="col-sm-8">{{ record.frequency_band }}</dd>
                                                 <dt class="col-sm-4">Internal Gain</dt>
-                                                <dd class="col-sm-8">{% if configuration.internal_gain is number %}{{ configuration.internal_gain }}{% else %}0{% endif %}</dd>
+                                                <dd class="col-sm-8">{% if record.internal_gain is number %}{{ record.internal_gain }}{% else %}0{% endif %}</dd>
                                                 <dt class="col-sm-4">External Gain</dt>
-                                                <dd class="col-sm-8">{% if configuration.external_gain is number %}{{ configuration.external_gain }}{% else %}0{% endif %}</dd>
+                                                <dd class="col-sm-8">{% if record.external_gain is number %}{{ record.external_gain }}{% else %}0{% endif %}</dd>
                                                 <dt class="col-sm-4">Beamwidth</dt>
-                                                <dd class="col-sm-8">{% if configuration.beamwidth is number %}{{ configuration.beamwidth }}{% else %}0{% endif %}</dd>
+                                                <dd class="col-sm-8">{% if record.beamwidth is number %}{{ record.beamwidth }}{% else %}0{% endif %}</dd>
                                                 <dt class="col-sm-4">Downtilt</dt>
-                                                <dd class="col-sm-8">{% if configuration.downtilt is number %}{{ configuration.downtilt }}{% else %}0{% endif %}</dd>
+                                                <dd class="col-sm-8">{% if record.downtilt is number %}{{ record.downtilt }}{% else %}0{% endif %}</dd>
                                             </dl>
                                         </div>
 
@@ -108,10 +108,11 @@
 
 {% block footer_scripts %}
     <script type="text/javascript">
+        let baseURI = '/settings/equipment-configurations'
         let btnCancel = null
 
         let onBtnCancelClick = function (e) {
-            window.location = '/settings/equipment-configurations'
+            window.location = baseURI
         }
 
         let setupListeners = function () {

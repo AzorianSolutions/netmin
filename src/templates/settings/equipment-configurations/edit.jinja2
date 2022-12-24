@@ -59,7 +59,7 @@
                                     <div class="form-group">
                                         <label for="txtLabel">Configuration Label</label>
                                         <input type="text" class="form-control" id="txtLabel" name="label"
-                                               value="{{ configuration.label }}"
+                                               value="{{ record.label }}"
                                                placeholder="Cambium Networks PMP450b High-Gain">
                                     </div>
                                     <!-- /.form-group -->
@@ -69,7 +69,7 @@
                                         <select id="selFrequencyBand" name="frequency_band" class="form-control">
                                             <option value="">Select a band...</option>
                                             {% for band in frequency_bands %}
-                                            <option value="{{ band }}"{% if band == configuration.frequency_band %} selected{% endif %}>{{ band }}</option>
+                                            <option value="{{ band }}"{% if band == record.frequency_band %} selected{% endif %}>{{ band }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -80,7 +80,7 @@
                                         <div class="input-group mb-3">
                                             <input type="text" id="txtInternalGain" name="internal_gain"
                                                    class="form-control" placeholder="Integrated antenna gain"
-                                                   value="{% if configuration.internal_gain is number %}{{ configuration.internal_gain }}{% endif %}">
+                                                   value="{% if record.internal_gain is number %}{{ record.internal_gain }}{% endif %}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"> dBi</span>
                                             </div>
@@ -94,7 +94,7 @@
                                         <div class="input-group mb-3">
                                             <input type="text" id="txtExternalGain" name="external_gain"
                                                    class="form-control" placeholder="Non-integrated antenna gain"
-                                                   value="{% if configuration.external_gain is number %}{{ configuration.external_gain }}{% endif %}">
+                                                   value="{% if record.external_gain is number %}{{ record.external_gain }}{% endif %}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"> dBi</span>
                                             </div>
@@ -108,7 +108,7 @@
                                         <div class="input-group mb-3">
                                             <input type="text" id="txtBeamwidth" name="beamwidth"
                                                    class="form-control" placeholder="Horizontal beamwidth of the antenna in degrees"
-                                                   value="{% if configuration.beamwidth is number %}{{ configuration.beamwidth }}{% endif %}">
+                                                   value="{% if record.beamwidth is number %}{{ record.beamwidth }}{% endif %}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"> &deg;</span>
                                             </div>
@@ -122,7 +122,7 @@
                                         <div class="input-group mb-3">
                                             <input type="text" id="txtDowntilt" name="downtilt"
                                                    class="form-control" placeholder="Electrical downtilt in degrees"
-                                                   value="{% if configuration.downtilt is number %}{{ configuration.downtilt }}{% endif %}">
+                                                   value="{% if record.downtilt is number %}{{ record.downtilt }}{% endif %}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"> &deg;</span>
                                             </div>
@@ -163,11 +163,12 @@
 
 {% block footer_scripts %}
     <script type="text/javascript">
+        let baseURI = '/settings/equipment-configurations'
         let btnCancel = null
         let frmEdit = null
 
         let onBtnCancelClick = function (e) {
-            window.location = '/settings/equipment-configurations'
+            window.location = baseURI
         }
 
         let setupListeners = function () {

@@ -57,7 +57,7 @@
                                     <div class="form-group">
                                         <label for="txtLabel">Package Label</label>
                                         <input type="text" class="form-control" id="txtLabel" name="label"
-                                               placeholder="100 Mbps (DL Mbps / UL Mbps)" value="{{ package.label }}">
+                                               placeholder="100 Mbps (DL Mbps / UL Mbps)" value="{{ record.label }}">
                                     </div>
                                     <!-- /.form-group -->
 
@@ -68,7 +68,7 @@
                                                 <input class="form-check-input" type="checkbox"
                                                        id="chkTechnology{{ loop.index }}"
                                                        name="technologies" value="{{ item }}"
-                                                        {% if package.technologies is in_list(item) %}
+                                                        {% if record.technologies is in_list(item) %}
                                                        checked{% endif %}>
                                                 <label class="form-check-label"
                                                        for="chkTechnology{{ loop.index }}">{{ technologies[item] }}</label>
@@ -83,7 +83,7 @@
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio"
                                                        id="radType{{ loop.index }}"
-                                                       name="type" value="{{ item }}"{% if package.type == item %}
+                                                       name="type" value="{{ item }}"{% if record.type == item %}
                                                        checked{% endif %}>
                                                 <label class="form-check-label"
                                                        for="radType{{ loop.index }}">{{ types[item] }}</label>
@@ -96,7 +96,7 @@
                                         <div class="input-group mb-3">
                                             <input type="text" id="txtDownstream" name="downstream"
                                                    class="form-control" placeholder="~ denotes unlimited"
-                                                   value="{{ package.downstream }}">
+                                                   value="{{ record.downstream }}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"> Mbps</span>
                                             </div>
@@ -110,7 +110,7 @@
                                         <div class="input-group mb-3">
                                             <input type="text" id="txtUpstream" name="upstream"
                                                    class="form-control" placeholder="~ denotes unlimited"
-                                                   value="{{ package.upstream }}">
+                                                   value="{{ record.upstream }}">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"> Mbps</span>
                                             </div>
@@ -150,6 +150,7 @@
 
 {% block footer_scripts %}
     <script type="text/javascript">
+        let baseURI = '/settings/service-packages'
         let btnCancel = null
         let frmEdit = null
 
@@ -160,7 +161,7 @@
         }
 
         let onBtnCancelClick = function (e) {
-            window.location = '/settings/service-packages'
+            window.location = baseURI
         }
 
         let setupListeners = function () {

@@ -11,7 +11,7 @@ def index(request: HttpRequest):
     from settings.models import ServicePackage
 
     params: dict = {
-        'packages': ServicePackage.objects.all().order_by('label', 'type', 'technologies', 'downstream', 'upstream'),
+        'records': ServicePackage.objects.all().order_by('label', 'type', 'technologies', 'downstream', 'upstream'),
     }
 
     return render(request, os.path.join(view_directory, 'index.jinja2'), params)
@@ -81,7 +81,7 @@ def edit(request, id: int | None = None):
 
     params: dict = {
         'id': id,
-        'package': package,
+        'record': package,
         'technologies': ServicePackage.TECHNOLOGIES,
         'types': ServicePackage.TYPES,
     }
@@ -100,7 +100,7 @@ def delete(request, id):
 
     params: dict = {
         'id': id,
-        'package': ServicePackage.objects.get(pk=id),
+        'record': ServicePackage.objects.get(pk=id),
         'technologies': ServicePackage.TECHNOLOGIES,
         'types': ServicePackage.TYPES,
     }
