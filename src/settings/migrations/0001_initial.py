@@ -12,18 +12,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='EquipmentConfiguration',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('label', models.CharField(max_length=100)),
-                ('frequency_band', models.CharField(max_length=20)),
-                ('internal_gain', models.SmallIntegerField()),
-                ('external_gain', models.SmallIntegerField()),
-                ('beamwidth', models.SmallIntegerField()),
-                ('downtilt', models.SmallIntegerField()),
-            ],
-        ),
-        migrations.CreateModel(
             name='ServicePackage',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
