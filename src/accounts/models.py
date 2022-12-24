@@ -1,4 +1,5 @@
 from django.db import models
+from settings.models import ServicePackage
 
 
 class Account(models.Model):
@@ -13,7 +14,6 @@ class Account(models.Model):
 
 
 class AccountLocation(models.Model):
-    account_id = models.IntegerField()
     label = models.CharField(max_length=100)
     type = models.CharField(max_length=30)
     address_line1 = models.CharField(max_length=100)
@@ -23,6 +23,9 @@ class AccountLocation(models.Model):
     address_postal_code = models.CharField(max_length=50)
     address_country = models.CharField(max_length=2)
 
+    # Relationships
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+
     TYPES: dict = {
         'commercial': 'Commercial',
         'residential': 'Residential',
@@ -30,12 +33,14 @@ class AccountLocation(models.Model):
 
 
 class AccountEquipment(models.Model):
-    account_id = models.IntegerField()
-    location_id = models.IntegerField()
     label = models.CharField(max_length=100)
     type = models.CharField(max_length=30)
     mac_address = models.CharField(max_length=12)
     serial_number = models.CharField(max_length=30, null=True)
+
+    # Relationships
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    location = models.ForeignKey(AccountLocation, on_delete=models.CASCADE)
 
     TYPES: dict = {
         'bridge': 'Bridge',
@@ -45,9 +50,6 @@ class AccountEquipment(models.Model):
 
 
 class AccountSubscription(models.Model):
-    account_id = models.IntegerField()
-    equipment_id = models.IntegerField()
-    package_id = models.IntegerField()
     status = models.CharField(max_length=30)
     lease_time = models.BigIntegerField(null=True)
     ipv4_address = models.GenericIPAddressField(null=True)
@@ -57,6 +59,11 @@ class AccountSubscription(models.Model):
     routes = models.TextField(null=True)
     username = models.CharField(max_length=50, null=True)
     password = models.CharField(max_length=50, null=True)
+
+    # Relationships
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    equipment = models.ForeignKey(AccountEquipment, on_delete=models.CASCADE)
+    package = models.ForeignKey(ServicePackage, on_delete=models.CASCADE)
 
     STATUSES: dict = {
         'active': 'Active',
