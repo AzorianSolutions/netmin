@@ -109,6 +109,9 @@
                                     </div>
                                 </div>
                                 {% endfor %}
+                                {% if not service_package_map.items() | length %}
+                                    <p>There are currently no service packages configured!</p>
+                                {% endif %}
                             </div>
                             <!-- /.card-body -->
 
