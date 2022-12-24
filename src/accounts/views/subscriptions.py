@@ -1,7 +1,8 @@
 import os
 from django.shortcuts import redirect, render
 from django.http import HttpRequest
-from accounts.models import Account, AccountSubscription
+from accounts.models import Account, AccountEquipment, AccountSubscription
+from settings.models import ServicePackage
 
 base_uri: str = '/accounts'
 view_directory: str = os.path.join('accounts', os.path.basename(__file__).split(".")[0].replace('_', '-'))
@@ -9,12 +10,20 @@ view_directory: str = os.path.join('accounts', os.path.basename(__file__).split(
 
 def edit(request: HttpRequest, account_id: int, id: int | None = None):
     if request.method == 'POST':
+
+        # Scrub lease time
+        lease_time = request.POST.get('lease_time')
+        if lease_time is not None and str(lease_time).isnumeric():
+            lease_time = int(lease_time)
+        else:
+            lease_time = None
+
         data: dict = {
             'account_id': account_id,
             'equipment_id': request.POST.get('equipment_id'),
             'package_id': request.POST.get('package_id'),
             'status': request.POST.get('status'),
-            'lease_time': request.POST.get('lease_time'),
+            'lease_time': lease_time,
             'ipv4_address': request.POST.get('ipv4_address'),
             'ipv4_pool': request.POST.get('ipv4_pool'),
             'ipv6_prefix': request.POST.get('ipv6_prefix'),
@@ -42,6 +51,8 @@ def edit(request: HttpRequest, account_id: int, id: int | None = None):
         'id': id,
         'account_id': account_id,
         'record': record,
+        'equipment': AccountEquipment.objects.filter(account_id=account_id),
+        'packages': ServicePackage.objects.all(),
     }
 
     return render(request, os.path.join(view_directory, 'edit.jinja2'), params)

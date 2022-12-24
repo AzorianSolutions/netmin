@@ -55,51 +55,109 @@
                                 <div class="card-body">
 
                                     <div class="form-group">
-                                        <label for="selLocation">Location</label>
-                                        <select class="form-control" id="selLocation" name="location_id">
-                                            <option value="">Select a location...</option>
-                                            {% for location in locations %}
-                                                <option value="{{ location.id }}"{% if record.location_id == location.id %}
-                                                        selected{% endif %}>{{ location.label }}</option>
+                                        <label for="selEquipment">Equipment</label>
+                                        <select class="form-control" id="selEquipment" name="equipment_id">
+                                            <option value="">Select equipment...</option>
+                                            {% for item in equipment %}
+                                                <option value="{{ item.id }}" {{ item.id | selected(record.equipment_id) }}>{{ item.label }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <!-- /.form-group -->
 
                                     <div class="form-group">
-                                        <label for="txtLabel">Label</label>
-                                        <input type="text" class="form-control" id="txtLabel" name="label"
-                                               placeholder="Equipment Label"
-                                               value="{{ record.label | no_value }}">
-                                    </div>
-                                    <!-- /.form-group -->
-
-                                    <div class="form-group">
-                                        <label for="selType">Equipment Type</label>
-                                        <select class="form-control" id="selType" name="type">
-                                            <option value="">Select a type...</option>
-                                            {% for item in record.TYPES %}
-                                                <option value="{{ item }}"{% if record.type == item %}
-                                                        selected{% endif %}>{{ record.TYPES[item] }}</option>
+                                        <label for="selPackage">Service Package</label>
+                                        <select class="form-control" id="selPackage" name="package_id">
+                                            <option value="">Select a package...</option>
+                                            {% for item in packages %}
+                                                <option value="{{ item.id }}" {{ item.id | selected(record.package_id) }}>{{ item.label }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <!-- /.form-group -->
 
                                     <div class="form-group">
-                                        <label for="txtMacAddress">MAC Address</label>
-                                        <input type="text" class="form-control" id="txtMacAddress" name="mac_address"
-                                               placeholder="00:00:00:00:00:00"
-                                               value="{% if record.mac_address %}{{ record.mac_address }}{% endif %}">
+                                        <label for="selStatus">Subscription Status</label>
+                                        <select class="form-control" id="selStatus" name="status">
+                                            <option value="">Select a status...</option>
+                                            {% for item in record.STATUSES %}
+                                                <option value="{{ item }}" {{ item | selected(record.status) }}>{{ record.STATUSES[item] }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                     <!-- /.form-group -->
 
                                     <div class="form-group">
-                                        <label for="txtSerialNumber">Serial Number</label>
-                                        <input type="text" class="form-control" id="txtSerialNumber"
-                                               name="serial_number"
-                                               placeholder="GF87832H4K"
-                                               value="{% if record.serial_number %}{{ record.serial_number }}{% endif %}">
+                                        <label for="txtLeaseTime">Lease Time</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" id="txtLeaseTime" name="lease_time"
+                                                   class="form-control" placeholder="84600"
+                                                   value="{{ record.lease_time | no_value }}">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">seconds</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="txtIPv4Address">IPv4 Address</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" id="txtIPv4Address" name="ipv4_address"
+                                                   class="form-control" placeholder="1.1.1.1"
+                                                   value="{{ record.ipv4_address | no_value }}">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">/32</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="txtIPv4Pool">IPv4 Pool</label>
+                                        <input type="text" class="form-control" id="txtIPv4Pool" name="ipv4_pool"
+                                               placeholder="subscribers"
+                                               value="{{ record.ipv4_pool | no_value }}">
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="txtIPv6Prefix">IPv6 Prefix</label>
+                                        <input type="text" class="form-control" id="txtIPv6Prefix" name="ipv6_prefix"
+                                               placeholder="2606:4700:4700::/64"
+                                               value="{{ record.ipv6_prefix | no_value }}">
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="txtIPv6Pool">IPv6 Pool</label>
+                                        <input type="text" class="form-control" id="txtIPv6Pool" name="ipv6_pool"
+                                               placeholder="subscribers"
+                                               value="{{ record.ipv6_pool | no_value }}">
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="txtRoutes">Network Routes</label>
+                                        <textarea placeholder="123.231.213.144/29"
+                                                class="form-control" rows="3"
+                                                  id="txtRoutes" name="routes">{{ record.routes | no_value }}</textarea>
+                                        <p>* Separate with commas or new lines</p>
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="txtUsername">Username</label>
+                                        <input type="text" class="form-control" id="txtUsername" name="username"
+                                               placeholder="Must be globally unique!"
+                                               value="{{ record.username | no_value }}">
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="txtPassword">Password</label>
+                                        <input type="text" class="form-control" id="txtPassword" name="password"
+                                               value="{{ record.password | no_value }}">
                                     </div>
                                     <!-- /.form-group -->
 
