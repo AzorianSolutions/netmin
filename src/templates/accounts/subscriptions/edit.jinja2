@@ -1,5 +1,5 @@
 {% extends 'layout/layout.jinja2' %}
-{% block title %}Accounts / {{ record.account.label }} / {{ id | action_label }} Equipment{% endblock %}
+{% block title %}Accounts / {{ record.account.label }} / {{ id | action_label }} Subscription{% endblock %}
 
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
@@ -9,7 +9,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1><i class="fas fa-key"></i> {{ id | action_label }} Equipment</h1>
+                        <h1><i class="fas fa-key"></i> {{ id | action_label }} Subscription</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -20,9 +20,9 @@
                                 <a href="/accounts">Accounts</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="/accounts/{{ record.account_id }}/edit#equipment">{{ record.account.label }}</a>
+                                <a href="/accounts/{{ record.account_id }}/edit#subscriptions">{{ record.account.label }}</a>
                             </li>
-                            <li class="breadcrumb-item active">{{ id | action_label }} Equipment</li>
+                            <li class="breadcrumb-item active">{{ id | action_label }} Subscription</li>
                         </ol>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
 
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Equipment Details
+                                    Subscription Details
                                 </h3>
                                 <div class="card-tools">
                                     <button type="button" title="Cancel" class="btn btn-tool btn-cancel"><i
@@ -70,7 +70,7 @@
                                         <label for="txtLabel">Label</label>
                                         <input type="text" class="form-control" id="txtLabel" name="label"
                                                placeholder="Equipment Label"
-                                               value="{% if record.label %}{{ record.label }}{% endif %}">
+                                               value="{{ record.label | no_value }}">
                                     </div>
                                     <!-- /.form-group -->
 
@@ -108,7 +108,7 @@
 
                                 <div class="card-footer">
                                     <button type="submit"
-                                            title="{{ id | action_label }} Equipment"
+                                            title="{{ id | action_label }} Subscription"
                                             class="btn btn-primary">{{ id | action_label }}</button>
                                     <button type="button" title="Cancel"
                                             class="btn btn-danger float-right btn-cancel">Cancel</button>
@@ -137,7 +137,7 @@
         let frmEdit = null
 
         let onBtnCancelClick = function (e) {
-            window.location = baseURI + '/edit#equipment'
+            window.location = baseURI + '/edit#subscriptions'
         }
 
         let setupListeners = function () {

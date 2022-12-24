@@ -1,5 +1,5 @@
 {% extends 'layout/layout.jinja2' %}
-{% block title %}Accounts / {% if id %}Edit{% else %}Add{% endif %} Account{% endblock %}
+{% block title %}Accounts / {{ id | action_label }} Account{% endblock %}
 
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
@@ -9,7 +9,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1><i class="fas fa-key"></i> {% if id %}Edit{% else %}Add{% endif %} Account</h1>
+                        <h1><i class="fas fa-key"></i> {{ id | action_label }} Account</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -19,7 +19,7 @@
                             <li class="breadcrumb-item">
                                 <a href="/accounts">Accounts</a>
                             </li>
-                            <li class="breadcrumb-item active">{% if id %}Edit{% else %}Add{% endif %} Account</li>
+                            <li class="breadcrumb-item active">{{ id | action_label }} Account</li>
                         </ol>
                     </div>
                 </div>
@@ -139,12 +139,11 @@
                                 <!-- /.card-body -->
 
                                 <div class="card-footer">
-                                    <button type="submit" title="{% if id %}Update{% else %}
-                                        Create{% endif %} Account" class="btn btn-primary">{% if id %}Update{% else %}
-                                        Create{% endif %}</button>
-                                    <button type="button" title="Cancel" class="btn btn-danger float-right btn-cancel">
-                                        Cancel
-                                    </button>
+                                    <button type="submit"
+                                            title="{{ id | action_label }} Account"
+                                            class="btn btn-primary">{{ id | action_label }}</button>
+                                    <button type="button" title="Cancel"
+                                            class="btn btn-danger float-right btn-cancel">Cancel</button>
                                 </div>
                                 <!-- /.card-footer -->
 

@@ -1,0 +1,140 @@
+{% extends 'layout/layout.jinja2' %}
+{% block title %}Accounts / {{ record.account.label }} / Delete Equipment{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><i class="fas fa-key"></i> Delete Equipment</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/accounts">Accounts</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/accounts/{{ record.account_id }}/edit#equipment">{{ record.account.label }}</a>
+                            </li>
+                            <li class="breadcrumb-item active">Delete Equipment</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- /.content -->
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-row card-danger">
+
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Delete Equipment
+                                </h3>
+                                <div class="card-tools">
+                                    <button type="button" title="Cancel" class="btn btn-tool btn-cancel"><i
+                                            class="fas fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <form action="" method="post">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+
+                                <div class="card-body">
+                                    <h2>Are you sure?</h2>
+                                    <p>Are you absolutely sure you want to <strong>delete this equipment?</strong>
+                                    </p>
+                                    <div class="card card-secondary">
+                                        <div class="card-header">
+                                            <h3 class="card-title">{{ record.label }}</h3>
+                                        </div>
+                                        <!-- /.card-header -->
+
+                                        <div class="card-body">
+                                            <dl class="row">
+                                                <div class="col col-4">
+                                                    <dt class="col-sm-4">Location</dt>
+                                                    <dd class="col-sm-8">{{ record.location.label }}</dd>
+                                                </div>
+                                                <div class="col col-4">
+                                                    <dt class="col-sm-4">Label</dt>
+                                                    <dd class="col-sm-8">{{ record.label }}</dd>
+                                                </div>
+                                                <div class="col col-4">
+                                                    <dt class="col-sm-4">Type</dt>
+                                                    <dd class="col-sm-8">{{ record.type }}</dd>
+                                                </div>
+                                            </dl>
+                                            <dl class="row">
+                                                <div class="col col-6">
+                                                    <dt class="col-sm-4">MAC Address</dt>
+                                                    <dd class="col-sm-8">{{ record.mac_address }}</dd>
+                                                </div>
+                                                <div class="col col-6">
+                                                    <dt class="col-sm-4">Serial Number</dt>
+                                                    <dd class="col-sm-8">{{ record.serial_number }}</dd>
+                                                </div>
+                                            </dl>
+                                        </div>
+                                        <!-- /.card-body -->
+
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit" title="Delete Location" class="btn btn-danger">Delete Location
+                                    </button>
+                                    <button type="button" title="Cancel" class="btn btn-primary btn-cancel float-right">
+                                        Cancel
+                                    </button>
+                                </div>
+                                <!-- /.card-footer -->
+
+                            </form>
+
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block footer_scripts %}
+    <script type="text/javascript">
+        let baseURI = '/accounts/{{ record.account_id }}/edit#equipment'
+        let btnCancel = null
+
+        let onBtnCancelClick = function (e) {
+            window.location = baseURI
+        }
+
+        let setupListeners = function () {
+            btnCancel.bind('click', onBtnCancelClick)
+        }
+
+        $(function () {
+            btnCancel = $('.btn-cancel')
+            setupListeners()
+        })
+    </script>
+{% endblock %}

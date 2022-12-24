@@ -1,14 +1,6 @@
 {% extends 'layout/layout.jinja2' %}
 {% block title %}Accounts{% endblock %}
 
-{% block html_head %}
-    <style type="text/css">
-        table.records th:nth-child(0n+2), table.records th:nth-child(0n+3), table.records th:nth-child(0n+4) {
-            width: 225px;
-        }
-    </style>
-{% endblock %}
-
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -98,6 +90,14 @@
         </section>
     </div>
     <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block html_head %}
+    <style type="text/css">
+        table.records th:nth-child(0n+2), table.records th:nth-child(0n+3), table.records th:nth-child(0n+4) {
+            width: 225px;
+        }
+    </style>
 {% endblock %}
 
 {% block footer_scripts %}
