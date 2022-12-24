@@ -1,5 +1,5 @@
 {% extends 'layout/layout.jinja2' %}
-{% block title %}Accounts / {{ record.account.label }} / Delete Equipment{% endblock %}
+{% block title %}Accounts / {{ record.account.label }} / Delete Subscription{% endblock %}
 
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
@@ -9,7 +9,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1><i class="fas fa-key"></i> Delete Equipment</h1>
+                        <h1><i class="fas fa-key"></i> Delete Subscription</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -20,9 +20,9 @@
                                 <a href="/accounts">Accounts</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="/accounts/{{ record.account_id }}/edit#equipment">{{ record.account.label }}</a>
+                                <a href="/accounts/{{ record.account_id }}/edit#subscriptions">{{ record.account.label }}</a>
                             </li>
-                            <li class="breadcrumb-item active">Delete Equipment</li>
+                            <li class="breadcrumb-item active">Delete Subscription</li>
                         </ol>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
 
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    Delete Equipment
+                                    Delete Subscription
                                 </h3>
                                 <div class="card-tools">
                                     <button type="button" title="Cancel" class="btn btn-tool btn-cancel"><i
@@ -55,37 +55,65 @@
 
                                 <div class="card-body">
                                     <h2>Are you sure?</h2>
-                                    <p>Are you absolutely sure you want to <strong>delete this equipment?</strong>
+                                    <p>Are you absolutely sure you want to <strong>delete this subscription?</strong>
                                     </p>
                                     <div class="card card-secondary">
                                         <div class="card-header">
-                                            <h3 class="card-title">{{ record.label }}</h3>
+                                            <h3 class="card-title">
+                                                {{ record.equipment.location.label }} / {{ record.equipment.label }} / {{ record.package.label }}
+                                            </h3>
                                         </div>
                                         <!-- /.card-header -->
 
                                         <div class="card-body">
                                             <dl class="row">
-                                                <div class="col col-4">
-                                                    <dt class="col-sm-4">Location</dt>
-                                                    <dd class="col-sm-8">{{ record.location.label }}</dd>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Equipment</dt>
+                                                    <dd class="col-sm-8">{{ record.equipment.label }}</dd>
                                                 </div>
-                                                <div class="col col-4">
-                                                    <dt class="col-sm-4">Label</dt>
-                                                    <dd class="col-sm-8">{{ record.label }}</dd>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Package</dt>
+                                                    <dd class="col-sm-8">{{ record.package.label }}</dd>
                                                 </div>
-                                                <div class="col col-4">
-                                                    <dt class="col-sm-4">Type</dt>
-                                                    <dd class="col-sm-8">{{ record.type }}</dd>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Status</dt>
+                                                    <dd class="col-sm-8">{{ record.status }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Lease Time</dt>
+                                                    <dd class="col-sm-8">{{ record.lease_time | none_value }}</dd>
                                                 </div>
                                             </dl>
                                             <dl class="row">
-                                                <div class="col col-6">
-                                                    <dt class="col-sm-4">MAC Address</dt>
-                                                    <dd class="col-sm-8">{{ record.mac_address }}</dd>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">IPv4 Address</dt>
+                                                    <dd class="col-sm-8">{{ record.ipv4_address | none_value }}</dd>
                                                 </div>
-                                                <div class="col col-6">
-                                                    <dt class="col-sm-4">Serial Number</dt>
-                                                    <dd class="col-sm-8">{{ record.serial_number }}</dd>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">IPv4 Pool</dt>
+                                                    <dd class="col-sm-8">{{ record.ipv4_pool | none_value }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">IPv6 Prefix</dt>
+                                                    <dd class="col-sm-8">{{ record.ipv6_prefix | none_value }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">IPv6 Pool</dt>
+                                                    <dd class="col-sm-8">{{ record.ipv6_pool | none_value }}</dd>
+                                                </div>
+                                            </dl>
+                                            <dl class="row">
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-5">Network Routes</dt>
+                                                    <dd class="col-sm-7">{{ record.routes | none_value }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Username</dt>
+                                                    <dd class="col-sm-8">{{ record.username | none_value }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Password</dt>
+                                                    <dd class="col-sm-8">{{ record.password | none_value }}</dd>
                                                 </div>
                                             </dl>
                                         </div>
@@ -96,7 +124,7 @@
                                 <!-- /.card-body -->
 
                                 <div class="card-footer">
-                                    <button type="submit" title="Delete Location" class="btn btn-danger">Delete Location
+                                    <button type="submit" title="Delete Subscription" class="btn btn-danger">Delete Subscription
                                     </button>
                                     <button type="button" title="Cancel" class="btn btn-primary btn-cancel float-right">
                                         Cancel
@@ -121,7 +149,7 @@
 
 {% block footer_scripts %}
     <script type="text/javascript">
-        let baseURI = '/accounts/{{ record.account_id }}/edit#equipment'
+        let baseURI = '/accounts/{{ record.account_id }}/edit#subscriptions'
         let btnCancel = null
 
         let onBtnCancelClick = function (e) {
