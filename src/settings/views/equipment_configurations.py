@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpRequest
 
 base_uri: str = '/settings/equipment-configurations'
-view_directory: str = os.path.join('settings', os.path.basename(__file__).split(".")[0])
+view_directory: str = os.path.join('settings', os.path.basename(__file__).split(".")[0].replace('_', '-'))
 
 
 def index(request: HttpRequest):

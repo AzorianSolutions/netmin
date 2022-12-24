@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpRequest
 
 base_uri: str = '/settings/service-packages'
-view_directory: str = os.path.join('settings', os.path.basename(__file__).split(".")[0])
+view_directory: str = os.path.join('settings', os.path.basename(__file__).split(".")[0].replace('_', '-'))
 unlimited_mark: str = '~'
 
 
