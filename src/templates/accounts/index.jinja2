@@ -112,13 +112,13 @@
         }
 
         let onBtnEditClick = function (e) {
-            let target = getRootElement(e, 'button')
+            let target = getRootElement(e.target, 'button')
             let accountId = target.data('id')
             window.location = baseURI + '/' + accountId + '/edit'
         }
 
         let onBtnDeleteClick = function (e) {
-            let target = getRootElement(e, 'button')
+            let target = getRootElement(e.target, 'button')
             let accountId = target.data('id')
             window.location = baseURI + '/' + accountId + '/delete'
         }
