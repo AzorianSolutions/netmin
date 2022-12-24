@@ -27,7 +27,7 @@ def edit(request: HttpRequest, account_id: int, id: int | None = None):
 
         AccountLocation(**data).save()
 
-        return redirect(f'{base_uri}/{account_id}/edit')
+        return redirect(f'{base_uri}/{account_id}/edit#locations')
 
     record: AccountLocation
 
@@ -50,7 +50,7 @@ def delete(request: HttpRequest, account_id: int, id: int):
 
     if request.method == 'POST':
         AccountLocation.objects.get(pk=id).delete()
-        return redirect(base_uri)
+        return redirect(f'{base_uri}/{account_id}/edit#locations')
 
     params: dict = {
         'id': id,
