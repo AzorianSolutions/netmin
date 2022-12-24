@@ -2,6 +2,7 @@ import os
 import re
 from django.shortcuts import redirect, render
 from django.http import HttpRequest
+from accounts.models import Account, AccountSubscription, AccountEquipment, AccountLocation
 
 base_uri: str = '/accounts'
 view_directory: str = 'accounts'
@@ -9,19 +10,14 @@ numbers_regex = re.compile(r'\d+')
 
 
 def index(request: HttpRequest):
-    from accounts.models import Account
-
     params: dict = {
-        'records': Account.objects.all().order_by('primary_contact_name', 'secondary_contact_name', 'org_name',
-                                                  'notes'),
+        'records': Account.objects.all().order_by('primary_contact_name', 'secondary_contact_name', 'org_name'),
     }
 
     return render(request, os.path.join(view_directory, 'index.jinja2'), params)
 
 
 def edit(request, id: int | None = None):
-    from accounts.models import Account, AccountSubscription, AccountEquipment, AccountLocation
-
     if request.method == 'POST':
         phone_fields: list = [
             'primary_contact_phone1',
@@ -65,8 +61,6 @@ def edit(request, id: int | None = None):
 
 
 def delete(request, id: int):
-    from accounts.models import Account
-
     if request.method == 'POST':
         Account.objects.get(pk=id).delete()
         return redirect(base_uri)

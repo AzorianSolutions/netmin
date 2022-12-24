@@ -1,14 +1,13 @@
 import os
 from django.shortcuts import redirect, render
 from django.http import HttpRequest
+from accounts.models import Account, AccountLocation
 
 base_uri: str = '/accounts'
 view_directory: str = os.path.join('accounts', os.path.basename(__file__).split(".")[0].replace('_', '-'))
 
 
 def edit(request: HttpRequest, account_id: int, id: int | None = None):
-    from accounts.models import Account, AccountLocation
-
     if request.method == 'POST':
         data: dict = {
             'account_id': account_id,
@@ -46,8 +45,6 @@ def edit(request: HttpRequest, account_id: int, id: int | None = None):
 
 
 def delete(request: HttpRequest, account_id: int, id: int):
-    from accounts.models import AccountLocation
-
     if request.method == 'POST':
         AccountLocation.objects.get(pk=id).delete()
         return redirect(f'{base_uri}/{account_id}/edit#locations')
