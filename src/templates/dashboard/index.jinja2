@@ -2,57 +2,125 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1><i class="fas fa-house"></i> Dashboard</h1>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><i class="fas fa-house"></i> Dashboard</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                    </div>
                 </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item">
-                            <a href="/">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active">Dashboard</li>
-                    </ol>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
-    </section>
+            </div><!-- /.container-fluid -->
+        </section>
 
-    <!-- Main content -->
-    <section class="content">
-        <!-- /.content -->
-        <div class="container-fluid">
+        <!-- Main content -->
+        <section class="content">
+            <!-- /.content -->
+            <div class="container-fluid">
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="card card-row card-secondary">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-primary elevation-1">
+                                <i class="fas fa-key"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Accounts</span>
+                                <span class="info-box-number">{{ total_accounts }}</span>
+                            </div>
 
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                Statistics
-                            </h3>
                         </div>
-                        <!-- /.card-header -->
-
-                        <div class="card-body">
-                            <p>There is absolutely nothing to see here right now.</p>
-                        </div>
-                        <!-- /.card-body -->
 
                     </div>
-                    <!-- /.card -->
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
 
-        </div><!-- /.container-fluid -->
-    </section>
-</div>
-<!-- /.content-wrapper -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-primary elevation-1">
+                                <i class="fas fa-location-dot"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Locations</span>
+                                <span class="info-box-number">{{ total_locations }}</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="clearfix hidden-md-up"></div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-primary elevation-1">
+                                <i class="fas fa-walkie-talkie"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Equipment</span>
+                                <span class="info-box-number">{{ total_equipment }}</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-primary elevation-1">
+                                <i class="fas fa-gauge-high"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Subscriptions</span>
+                                <span class="info-box-number">{{ total_subscriptions }}</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-row card-primary">
+
+                            <div class="card-header">
+                                <h3 class="card-title">Service Package Breakdown</h3>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <div class="card-body">
+                                {% for package_id, package in service_package_map.items() %}
+                                <div class="progress-group mb-4">
+                                    {{ package.label }}
+                                    <span class="float-right">
+                                        <b>{{ package['total'] }}</b>/{{ total_subscriptions }}</span>
+                                    <div class="progress progress-sm">
+                                        <div class="progress-bar bg-success" style="width: {{ package['share'] }}%"></div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <!-- /.card-body -->
+
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
 {% endblock %}
