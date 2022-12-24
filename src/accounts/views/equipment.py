@@ -11,7 +11,7 @@ def edit(request: HttpRequest, account_id: int, id: int | None = None):
     params: dict = {
         'id': id,
         'account_id': account_id,
-        'record': AccountEquipment.objects.get(pk=id),
+        'record': AccountEquipment.objects.get(pk=id) if id else AccountEquipment(),
     }
 
     return render(request, os.path.join(view_directory, 'edit.jinja2'), params)
