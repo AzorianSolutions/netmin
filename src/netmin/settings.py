@@ -26,8 +26,7 @@ SECRET_KEY = '^)mj#yf5eZW{-E&e0I%)q!Hel&:o!$!O{V]*z[U/a[rsl,vxi0F:{X/PTH[kijw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -40,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'dashboard.apps.DashboardConfig',
+    'radius.apps.RadiusConfig',
     'settings.apps.SettingsConfig',
 ]
 

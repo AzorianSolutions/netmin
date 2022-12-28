@@ -1,0 +1,110 @@
+import json
+import radiusd
+import requests
+import pprint
+from requests import Response
+
+
+def instantiate(p):
+    return 0
+
+
+def authorize(p):
+    radiusd.radlog(radiusd.L_INFO, '*** radlog call in authorize ***')
+    updates: dict = {}
+    return radiusd.RLM_MODULE_OK, updates
+
+
+def authenticate(p):
+    radiusd.radlog(radiusd.L_INFO, '*** radlog call in authenticate ***')
+
+    payload: str = json.dumps(p)
+    response_payload: Response = requests.get(radiusd.config['api']['base_uri'] + '/authenticate', params=payload)
+    response: dict | None = None
+
+    if len(response_payload.content):
+        response = json.loads(response_payload.content)
+
+    if isinstance(response, dict) and 'reply' in response and isinstance(response['reply'], list):
+        response['reply'] = tuple(tuple(sub) for sub in response['reply'])
+
+    return radiusd.RLM_MODULE_OK, response
+
+
+def preacct(p):
+    print("*** preacct ***")
+    print(p)
+    return radiusd.RLM_MODULE_OK
+
+
+def checksimul(p):
+    print("*** checksimul ***")
+    print(p)
+    return radiusd.RLM_MODULE_OK
+
+
+def accounting(p):
+    print("*** accounting ***")
+    radiusd.radlog(radiusd.L_INFO, '*** radlog call in accounting (0) ***')
+    print()
+    print(p)
+    return radiusd.RLM_MODULE_OK
+
+
+def pre_proxy(p):
+    print("*** pre_proxy ***")
+    print(p)
+    return radiusd.RLM_MODULE_OK
+
+
+def post_proxy(p):
+    print("*** post_proxy ***")
+    print(p)
+    return radiusd.RLM_MODULE_OK
+
+
+def post_auth(p):
+    print("*** post_auth ***")
+
+    # This is true when using pass_all_vps_dict
+    if type(p) is dict:
+        print("Request:", p["request"])
+        print("Reply:", p["reply"])
+        print("Config:", p["config"])
+        print("State:", p["session-state"])
+        print("Proxy-Request:", p["proxy-request"])
+        print("Proxy-Reply:", p["proxy-reply"])
+
+    else:
+        print(p)
+
+    # Dictionary representing changes we want to make to the different VPS
+    update_dict = {
+        "request": (("User-Password", ":=", "A new password"),),
+        "reply": (("Reply-Message", "The module is doing its job"),
+                  ("User-Name", "NewUserName")),
+        "config": (("Cleartext-Password", "A new password"),),
+    }
+
+    return radiusd.RLM_MODULE_OK, update_dict
+    # Alternatively, you could use the legacy 3-tuple output
+    # (only reply and config can be updated)
+    # return radiusd.RLM_MODULE_OK, update_dict["reply"], update_dict["config"]
+
+
+def recv_coa(p):
+    print("*** recv_coa ***")
+    print(p)
+    return radiusd.RLM_MODULE_OK
+
+
+def send_coa(p):
+    print("*** send_coa ***")
+    print(p)
+    return radiusd.RLM_MODULE_OK
+
+
+def detach(p):
+    print("*** goodbye from example.py ***")
+    print(p)
+    return radiusd.RLM_MODULE_OK
