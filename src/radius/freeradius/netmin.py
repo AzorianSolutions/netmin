@@ -8,7 +8,7 @@ def execute_request(action: str, payload: str) -> Response:
     return requests.get(radiusd.config['api']['base_uri'] + f'/{action}', params=payload)
 
 
-def extract_response(response: Response) -> dict:
+def extract_response(response: Response) -> dict | None:
     result: dict | None = None
 
     if len(response.content):
