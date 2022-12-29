@@ -1,8 +1,31 @@
 import json
 import radiusd
 import requests
-import pprint
 from requests import Response
+
+
+def execute_request(action: str, payload: str) -> Response:
+    return requests.get(radiusd.config['api']['base_uri'] + f'/{action}', params=payload)
+
+
+def extract_response(response: Response) -> dict:
+    result: dict | None = None
+
+    if len(response.content):
+        result = json.loads(response.content)
+
+    return result
+
+
+def convert_response(response: dict) -> dict:
+    if not isinstance(response, dict):
+        return response
+
+    for key, value in response.items():
+        if isinstance(value, list):
+            response[key] = tuple(tuple(sub) for sub in value)
+
+    return response
 
 
 def instantiate(p):
@@ -10,101 +33,66 @@ def instantiate(p):
 
 
 def authorize(p):
-    radiusd.radlog(radiusd.L_INFO, '*** radlog call in authorize ***')
-    updates: dict = {}
-    return radiusd.RLM_MODULE_OK, updates
+    radiusd.radlog(radiusd.L_INFO, f'netmin: authorize')
+    response: dict = convert_response(extract_response(execute_request('authorize', json.dumps(p))))
+    return radiusd.RLM_MODULE_OK, response
 
 
 def authenticate(p):
-    radiusd.radlog(radiusd.L_INFO, '*** radlog call in authenticate ***')
-
-    payload: str = json.dumps(p)
-    response_payload: Response = requests.get(radiusd.config['api']['base_uri'] + '/authenticate', params=payload)
-    response: dict | None = None
-
-    if len(response_payload.content):
-        response = json.loads(response_payload.content)
-
-    if isinstance(response, dict) and 'reply' in response and isinstance(response['reply'], list):
-        response['reply'] = tuple(tuple(sub) for sub in response['reply'])
-
+    radiusd.radlog(radiusd.L_INFO, 'netmin: authenticate')
+    response: dict = convert_response(extract_response(execute_request('authenticate', json.dumps(p))))
     return radiusd.RLM_MODULE_OK, response
 
 
 def preacct(p):
-    print("*** preacct ***")
-    print(p)
-    return radiusd.RLM_MODULE_OK
+    radiusd.radlog(radiusd.L_INFO, 'netmin: preacct')
+    response: dict = convert_response(extract_response(execute_request('preacct', json.dumps(p))))
+    return radiusd.RLM_MODULE_OK, response
 
 
 def checksimul(p):
-    print("*** checksimul ***")
-    print(p)
-    return radiusd.RLM_MODULE_OK
+    radiusd.radlog(radiusd.L_INFO, 'netmin: checksimul')
+    response: dict = convert_response(extract_response(execute_request('checksimul', json.dumps(p))))
+    return radiusd.RLM_MODULE_OK, response
 
 
 def accounting(p):
-    print("*** accounting ***")
-    radiusd.radlog(radiusd.L_INFO, '*** radlog call in accounting (0) ***')
-    print()
-    print(p)
-    return radiusd.RLM_MODULE_OK
+    radiusd.radlog(radiusd.L_INFO, f'netmin: accounting')
+    response: dict = convert_response(extract_response(execute_request('accounting', json.dumps(p))))
+    return radiusd.RLM_MODULE_OK, response
 
 
 def pre_proxy(p):
-    print("*** pre_proxy ***")
-    print(p)
-    return radiusd.RLM_MODULE_OK
+    radiusd.radlog(radiusd.L_INFO, f'netmin: pre_proxy')
+    response: dict = convert_response(extract_response(execute_request('pre_proxy', json.dumps(p))))
+    return radiusd.RLM_MODULE_OK, response
 
 
 def post_proxy(p):
-    print("*** post_proxy ***")
-    print(p)
-    return radiusd.RLM_MODULE_OK
+    radiusd.radlog(radiusd.L_INFO, f'netmin: post_proxy')
+    response: dict = convert_response(extract_response(execute_request('post_proxy', json.dumps(p))))
+    return radiusd.RLM_MODULE_OK, response
 
 
 def post_auth(p):
-    print("*** post_auth ***")
-
-    # This is true when using pass_all_vps_dict
-    if type(p) is dict:
-        print("Request:", p["request"])
-        print("Reply:", p["reply"])
-        print("Config:", p["config"])
-        print("State:", p["session-state"])
-        print("Proxy-Request:", p["proxy-request"])
-        print("Proxy-Reply:", p["proxy-reply"])
-
-    else:
-        print(p)
-
-    # Dictionary representing changes we want to make to the different VPS
-    update_dict = {
-        "request": (("User-Password", ":=", "A new password"),),
-        "reply": (("Reply-Message", "The module is doing its job"),
-                  ("User-Name", "NewUserName")),
-        "config": (("Cleartext-Password", "A new password"),),
-    }
-
-    return radiusd.RLM_MODULE_OK, update_dict
-    # Alternatively, you could use the legacy 3-tuple output
-    # (only reply and config can be updated)
-    # return radiusd.RLM_MODULE_OK, update_dict["reply"], update_dict["config"]
+    radiusd.radlog(radiusd.L_INFO, f'netmin: post_auth')
+    response: dict = convert_response(extract_response(execute_request('post_auth', json.dumps(p))))
+    return radiusd.RLM_MODULE_OK, response
 
 
 def recv_coa(p):
-    print("*** recv_coa ***")
-    print(p)
-    return radiusd.RLM_MODULE_OK
+    radiusd.radlog(radiusd.L_INFO, f'netmin: recv_coa')
+    response: dict = convert_response(extract_response(execute_request('recv_coa', json.dumps(p))))
+    return radiusd.RLM_MODULE_OK, response
 
 
 def send_coa(p):
-    print("*** send_coa ***")
-    print(p)
-    return radiusd.RLM_MODULE_OK
+    radiusd.radlog(radiusd.L_INFO, f'netmin: send_coa')
+    response: dict = convert_response(extract_response(execute_request('send_coa', json.dumps(p))))
+    return radiusd.RLM_MODULE_OK, response
 
 
 def detach(p):
-    print("*** goodbye from example.py ***")
-    print(p)
-    return radiusd.RLM_MODULE_OK
+    radiusd.radlog(radiusd.L_INFO, f'netmin: detach')
+    response: dict = convert_response(extract_response(execute_request('detach', json.dumps(p))))
+    return radiusd.RLM_MODULE_OK, response
