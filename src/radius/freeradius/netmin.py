@@ -19,7 +19,7 @@ def extract_response(response: Response) -> dict:
 
 def convert_response(response: dict) -> dict:
     if not isinstance(response, dict):
-        return response
+        response = {}
 
     for key, value in response.items():
         if isinstance(value, list):

@@ -19,6 +19,8 @@ def get_payload(request: HttpRequest) -> dict:
 def action_handler(request: HttpRequest, action: str = None):
     print(f'RADIUS Action: {action}')
     print('This action is not currently being handled.')
+    payload: dict = get_payload(request)
+    print(payload)
     return HttpResponse(status=204)
 
 
