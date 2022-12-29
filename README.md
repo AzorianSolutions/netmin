@@ -1,5 +1,13 @@
 # Netmin
-A network access management app that integrates with freeRADIUS.
+
+A simple network access controller designed for RADIUS solutions.
+
+## Supported RADIUS Servers
+
+### freeRADIUS
+
+Currently, the project provides a controller client that is for freeRADIUS. The client is implemented via the
+"rlm_python3" module provided by freeRADIUS.
 
 ## Running the Application
 

@@ -23,6 +23,4 @@ def action_handler(request: HttpRequest, action: str = None):
         reply.append(['Acct-Interim-Interval', '15'])
         reply.append(['Mikrotik-Rate-Limit', '2M/20M'])
 
-    pprint.pp(dict(request.GET.items()))
-
     return HttpResponse(json.dumps(data), status=status, content_type='application/json')
