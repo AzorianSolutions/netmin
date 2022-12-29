@@ -3,13 +3,11 @@ version: "3.7"
 services:
 
   radius:
-    #image: freeradius/freeradius-server:3.2.1
     image: azoriansolutions/freeradius-python3
     restart: unless-stopped
     #command: ['freeradius', '-X']
     command: ['tail', '-f', '/dev/null']
     volumes:
-
       - /home/matt/Projects/as/apps/netmin/conf/clients.conf:/etc/freeradius/3.0/clients.conf
       - /home/matt/Projects/as/apps/netmin/conf/virtual-server.conf:/etc/freeradius/3.0/sites-enabled/netmin
       - /home/matt/Projects/as/apps/netmin/conf/rlm_python3.conf:/etc/freeradius/3.0/mods-enabled/python3
