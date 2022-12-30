@@ -10,7 +10,7 @@ def get_payload(request: HttpRequest) -> dict:
 
     for key, value in body.items():
         payload[key] = {}
-        if isinstance(value, list|tuple):
+        if isinstance(value, list | tuple):
             for item in value:
                 payload[key][item[0]] = item[1]
 
@@ -33,7 +33,8 @@ def authenticate(request: HttpRequest):
 
     key_map: dict = {
         'dhcp': ['Agent-Remote-Id'],
-        'ppp': ['User-Name', 'CHAP-Challenge', 'CHAP-Password'],
+        'ppp-chap': ['User-Name', 'CHAP-Challenge', 'CHAP-Password'],
+        'ppp-pap': ['User-Name', 'User-Password'],
     }
     payload: dict = get_payload(request)
     auth_type: str | None = None
@@ -81,33 +82,43 @@ def authenticate(request: HttpRequest):
             if registrations.count():
                 equipment = registrations[0]
 
-        if auth_type == 'ppp':
+        if auth_type == 'ppp-chap':
             user_id: str = str(payload['request']['User-Name'])
-            chap_challenge: str = str(payload['request']['CHAP-Challenge'])[2:]
-            chap_password: str = str(payload['request']['CHAP-Password'])[4:]
             chap_id: str = str(payload['request']['CHAP-Password'])[2:4]
+            chap_password: str = payload['request']['CHAP-Password'][4:]
+            chap_challenge: str = str(payload['request']['CHAP-Challenge'])[2:]
 
-            print(f'Username: {user_id}')
-            print(f'CHAP ID: {chap_id}')
-            print(f'CHAP Challenge: {chap_challenge}')
-            print(f'CHAP Password: {chap_password}')
+            print(f'              User ID: {user_id}')
+            print(f'              CHAP ID: {chap_id}')
+            print(f'       CHAP Challenge: {chap_challenge}')
+            print(f'        CHAP Password: {chap_password}')
 
-            subs: QuerySet = AccountSubscription.objects.filter(username=user_id)
+            subs: QuerySet = AccountSubscription.objects.filter(username=user_id).order_by('-id')
             if subs.count():
                 sub: AccountSubscription = subs[0]
-                valid: bool = False
-                cleartext_password: str = sub.password
-                test_value: str = f'{chap_id}{cleartext_password}{chap_challenge}'.encode('UTF-8').hex()
-                hash_value: str = hashlib.md5(test_value.encode('UTF-8')).hexdigest()
+                hasher = hashlib.md5()
 
-                print(f'Clear-text password: {cleartext_password}')
-                print(f'Test Value: {test_value}')
-                print(f'Hash Value: {hash_value}')
+                hasher.update(chap_id.encode('ascii'))
+                hasher.update(sub.password.encode('ascii'))
+                hasher.update(chap_challenge.encode('ascii'))
 
-                # valid = True
+                print(f'  Test Value (Hashed): {hasher.hexdigest()}')
+                print(f'Test Value (Pre-Hash): {chap_id + sub.password + chap_challenge}')
 
-                if valid:
+                if chap_password == hasher.hexdigest():
                     subscription = sub
+                else:
+                    status = 401
+
+        if auth_type == 'ppp-pap':
+            user_id: str = str(payload['request']['User-Name'])
+            user_password: str = str(payload['request']['User-Password'])
+            subs: QuerySet = AccountSubscription.objects.filter(username=user_id, password=user_password) \
+                .order_by('-id')
+            if subs.count():
+                subscription = subs[0]
+            else:
+                status = 401
 
         if isinstance(equipment, AccountEquipment):
             subscriptions: QuerySet = AccountSubscription.objects.filter(equipment=equipment).order_by('-id')
