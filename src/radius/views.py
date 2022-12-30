@@ -140,9 +140,11 @@ def authenticate(req: HttpRequest):
 
             # Static Network Routes
             if isinstance(subscription.routes, str):
-                routes: list = subscription.routes.split(',')
+                routes: list = subscription.routes.replace('\r', ',').replace('\n', ',').split(',')
                 for route in routes:
-                    response.reply.add_only('Framed-Route', route)
+                    if not len(str(route).strip()):
+                        continue
+                    response.reply.add('Framed-Route', route)
 
             # Package Throughput Limit
             if isinstance(subscription.package.downstream, float) \
