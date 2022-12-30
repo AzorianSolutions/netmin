@@ -1,6 +1,6 @@
 import hashlib
 from django.http import HttpRequest, HttpResponse
-from radius.clients.freeradius.mutables import NetminRequest, NetminResponse
+from radius.mutables import NetminRequest, NetminResponse
 
 
 def action_handler(req: HttpRequest, action: str = None):
