@@ -12,45 +12,7 @@
 #   CHAP-Password = 0x017a7a347c4a5fd26d34fe5ce9b3e2034f
 #   NAS-Identifier = "office.azorian.solutions"
 #   NAS-IP-Address = 192.168.10.1
-
-# Hashed Password To Match
-# 7a7a347c4a5fd26d34fe5ce9b3e2034f
-
-# Clear-Text Password Hash
-# b653e16c50efde5b2af141640462e6e1
-
-# Clear-Text Password Double Hash
-# 0054095c6dd11a39eda8facf09bf7249
-
-# Clear-Text Secret Hash
-# 79fad3501827a8d5c8e7c2b286f44adf
-
-# Clear-Text Challenge Hash
-# c470734effbc982afc3fa00a32d2ea2e
-
-
-echo -n "1263825u77063a012fbc9446e234be03e4a69fec" | openssl dgst -md5
-echo -n "1263825u0x77063a012fbc9446e234be03e4a69fec" | openssl dgst -md5
-
-echo -n "013825u77063a012fbc9446e234be03e4a69fec" | openssl dgst -md5
-
-echo -n "0013825u77063a012fbc9446e234be03e4a69fec" | openssl dgst -md5
-
-
-echo -n "13825u77063a012fbc9446e234be03e4a69fec" | openssl dgst -md5
-echo -n "13825u77063a012fbc9446e234be03e4a69fec" | openssl dgst -md5
-echo "013825u77063a012fbc9446e234be03e4a69fec" | openssl dgst -md5
-echo "13825u77063a012fbc9446e234be03e4a69fec" | openssl dgst -md5
-
-
-echo -n "13825u79fad3501827a8d5c8e7c2b286f44adf" | openssl dgst -md5
-echo -n "13825uas3825test" | openssl dgst -md5
-echo -n "3825u" | openssl dgst -md5
-echo -n "77063a012fbc9446e234be03e4a69fec" | openssl dgst -md5
-echo -n "as3825test" | openssl dgst -md5
-
-echo -n "2116977063a012fbc9446e234be03e4a69fecas3825test" | openssl dgst -md5
-
+#
 # Received Access-Request Id 130 from 192.168.10.1:38819 to 192.168.230.130:1912 length 196
 #   User-Name = "54:B2:03:9B:29:65"
 #   NAS-Port-Type = Ethernet

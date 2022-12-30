@@ -25,31 +25,25 @@ def action_handler(request: HttpRequest, action: str = None):
     return HttpResponse(status=204)
 
 
-def authenticate(request: HttpRequest):
+def authenticate(req: HttpRequest):
     from django.db.models import QuerySet
     from accounts.models import AccountEquipment, AccountSubscription
+    from radius.clients.freeradius.mutables import NetminRequest, NetminResponse
 
     print(f'RADIUS Action: authenticate')
 
+    auth_type: str | None = None
     key_map: dict = {
         'dhcp': ['Agent-Remote-Id'],
         'ppp-chap': ['User-Name', 'CHAP-Challenge', 'CHAP-Password'],
         'ppp-pap': ['User-Name', 'User-Password'],
     }
-    payload: dict = get_payload(request)
-    auth_type: str | None = None
-    status: int = 200
-    response: dict = {
-        'config': [],
-        'request': [],
-        'reply': [],
-        'session-state': [],
-        'proxy-request': [],
-        'proxy-reply': [],
-    }
+    payload: dict = get_payload(req)
+    request: NetminRequest = NetminRequest.loads(req.body.decode('UTF-8'))
+    response: NetminResponse = NetminResponse()
 
     if 'request' not in payload:
-        status = 400
+        response.status = 4
     else:
         for key, value in key_map.items():
             valid: bool = True
@@ -63,20 +57,21 @@ def authenticate(request: HttpRequest):
                 break
 
     if auth_type is None:
-        status = 400
+        response.status = 4
 
-    if status == 200:
-        reply: list = response['reply']
+    if response.status in [2, 3, 7, 8]:
+        user_id: str | None = None
         equipment: AccountEquipment | None = None
         subscription: AccountSubscription | None = None
-        user_id: str | None = None
 
         if auth_type == 'dhcp':
             user_id: str = str(payload['request']['Agent-Remote-Id']).upper().split('X')[1]
             circuit_id: str = str(payload['request']['Agent-Circuit-Id']).upper().split('X')[1]
             cpe_id: str = str(payload['request']['User-Name']).upper().replace(':', '')
 
-            print(f'Authenticating MAC {cpe_id} via CPE {user_id} and Access Point {circuit_id}')
+            print(f'   User ID: {user_id}')
+            print(f'Circuit ID: {circuit_id}')
+            print(f'    CPE ID: {cpe_id}')
 
             registrations: QuerySet = AccountEquipment.objects.filter(mac_address=user_id)
             if registrations.count():
@@ -108,7 +103,7 @@ def authenticate(request: HttpRequest):
                 if chap_password == hasher.hexdigest():
                     subscription = sub
                 else:
-                    status = 401
+                    response.status = 0
 
         if auth_type == 'ppp-pap':
             user_id: str = str(payload['request']['User-Name'])
@@ -118,7 +113,7 @@ def authenticate(request: HttpRequest):
             if subs.count():
                 subscription = subs[0]
             else:
-                status = 401
+                response.status = 0
 
         if isinstance(equipment, AccountEquipment):
             subscriptions: QuerySet = AccountSubscription.objects.filter(equipment=equipment).order_by('-id')
@@ -129,41 +124,37 @@ def authenticate(request: HttpRequest):
 
         if subscription is None:
             print(f'Could not find subscription for {user_id}')
+            response.status = 0
         else:
             print(f'Found subscription for {user_id} with id {subscription.id}')
+            response.status = 2
 
             if isinstance(subscription.lease_time, int):
-                reply.append(['Session-Timeout', str(subscription.lease_time)])
+                response.reply.add_only('Session-Timeout', str(subscription.lease_time))
 
             if isinstance(subscription.ipv4_address, str):
-                reply.append(['Framed-IP-Address', subscription.ipv4_address])
-                reply.append(['Framed-IP-Netmask', '255.255.255.0'])
+                response.reply.add_only('Framed-IP-Address', subscription.ipv4_address)
+                response.reply.add_only('Framed-IP-Netmask', '255.255.255.0')
 
             if isinstance(subscription.ipv4_pool, str):
-                reply.append(['Framed-Pool', subscription.ipv4_pool])
+                response.reply.add_only('Framed-Pool', subscription.ipv4_pool)
 
             if isinstance(subscription.ipv6_prefix, str):
-                reply.append(['Delegated-IPv6-Prefix', subscription.ipv6_prefix])
+                response.reply.add_only('Delegated-IPv6-Prefix', subscription.ipv6_prefix)
 
             if isinstance(subscription.ipv6_pool, str):
-                reply.append(['Delegated-IPv6-Prefix-Pool', subscription.ipv6_pool])
+                response.reply.add_only('Delegated-IPv6-Prefix-Pool', subscription.ipv6_pool)
 
             if isinstance(subscription.routes, str):
-                reply.append(['Framed-Route', subscription.routes])
+                response.reply.add('Framed-Route', subscription.routes)
 
             if isinstance(subscription.package.downstream, float) \
                     and isinstance(subscription.package.upstream, float):
                 limit: str = f'{int(subscription.package.upstream)}/{int(subscription.package.downstream)}'
-                reply.append(['Mikrotik-Rate-Limit', limit])
+                response.reply.add_only('Mikrotik-Rate-Limit', limit)
 
-        reply.append(['Acct-Interim-Interval', '15'])
+        response.reply.add_only('Acct-Interim-Interval', '15')
 
-    params: dict = {
-        'status': status,
-    }
-
-    if status == 200:
-        params['content'] = json.dumps(response),
-        params['content_type'] = 'application/json'
+    params: dict = {'status': 200, 'content': response.dumps(), 'content_type': 'application/json'}
 
     return HttpResponse(**params)
