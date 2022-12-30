@@ -1,3 +1,4 @@
+import hashlib
 import json
 import pprint
 from django.http import HttpRequest, HttpResponse
@@ -70,28 +71,43 @@ def authenticate(request: HttpRequest):
         user_id: str | None = None
 
         if auth_type == 'dhcp':
+            user_id: str = str(payload['request']['Agent-Remote-Id']).upper().split('X')[1]
             circuit_id: str = str(payload['request']['Agent-Circuit-Id']).upper().split('X')[1]
-            remote_id: str = str(payload['request']['Agent-Remote-Id']).upper().split('X')[1]
             cpe_id: str = str(payload['request']['User-Name']).upper().replace(':', '')
-            user_id = remote_id
 
-            print(f'Authenticating MAC {cpe_id} via CPE {remote_id} and Access Point {circuit_id}')
+            print(f'Authenticating MAC {cpe_id} via CPE {user_id} and Access Point {circuit_id}')
 
-            registrations: QuerySet = AccountEquipment.objects.filter(mac_address=remote_id)
+            registrations: QuerySet = AccountEquipment.objects.filter(mac_address=user_id)
             if registrations.count():
                 equipment = registrations[0]
 
         if auth_type == 'ppp':
-            username: str = str(payload['request']['User-Name'])
-            challenge: str = str(payload['request']['CHAP-Challenge'])
-            password: str = str(payload['request']['CHAP-Password'])
-            user_id = username
+            user_id: str = str(payload['request']['User-Name'])
+            chap_challenge: str = str(payload['request']['CHAP-Challenge'])[2:]
+            chap_password: str = str(payload['request']['CHAP-Password'])[4:]
+            chap_id: str = str(payload['request']['CHAP-Password'])[2:4]
 
-            print(f'Authenticating user {username} via CHAP with challenge {challenge} and password {password}')
+            print(f'Username: {user_id}')
+            print(f'CHAP ID: {chap_id}')
+            print(f'CHAP Challenge: {chap_challenge}')
+            print(f'CHAP Password: {chap_password}')
 
-            subs: QuerySet = AccountSubscription.objects.filter(username=username)
+            subs: QuerySet = AccountSubscription.objects.filter(username=user_id)
             if subs.count():
-                subscription = subs[0]
+                sub: AccountSubscription = subs[0]
+                valid: bool = False
+                cleartext_password: str = sub.password
+                test_value: str = f'{chap_id}{cleartext_password}{chap_challenge}'.encode('UTF-8').hex()
+                hash_value: str = hashlib.md5(test_value.encode('UTF-8')).hexdigest()
+
+                print(f'Clear-text password: {cleartext_password}')
+                print(f'Test Value: {test_value}')
+                print(f'Hash Value: {hash_value}')
+
+                # valid = True
+
+                if valid:
+                    subscription = sub
 
         if isinstance(equipment, AccountEquipment):
             subscriptions: QuerySet = AccountSubscription.objects.filter(equipment=equipment).order_by('-id')
