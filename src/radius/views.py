@@ -17,16 +17,18 @@ def authenticate(req: HttpRequest):
 
     print(f'RADIUS Action: authenticate')
 
-    auth_type: str | None = None
+    # This map determines what combinations of attributes must be present for each authentication type.
     key_map: dict = {
         'dhcp': ['User-Name', 'Agent-Remote-Id'],
         'ppp-chap': ['User-Name', 'CHAP-Challenge', 'CHAP-Password'],
         'ppp-pap': ['User-Name', 'User-Password'],
     }
+    auth_type: str | None = None
     request: NetminRequest = NetminRequest.loads(req.body.decode('UTF-8'))
     response: NetminResponse = NetminResponse()
     pass_statuses: list = [2, 3, 7, 8]
 
+    # Determine the authentication type for the request
     for key, value in key_map.items():
         valid: bool = True
         for item in value:
@@ -37,14 +39,17 @@ def authenticate(req: HttpRequest):
             auth_type = key
             break
 
+    # Set a failure status if we don't know the authentication type
     if auth_type is None:
         response.status = 4
 
+    # Proceed to handle authentication if the current response status is still passing
     if response.status in pass_statuses:
         user_id: str | None = None
         equipment: AccountEquipment | None = None
         subscription: AccountSubscription | None = None
 
+        # Handle DHCP authentication
         if auth_type == 'dhcp':
             user_id: str = request.request.get_first('Agent-Remote-Id').upper().split('X')[1]
             cpe_id: str = request.request.get_first('User-Name').upper().replace(':', '')
@@ -56,6 +61,7 @@ def authenticate(req: HttpRequest):
             if registrations.count():
                 equipment = registrations[0]
 
+        # Handle PPPoE CHAP authentication
         if auth_type == 'ppp-chap':
             user_id: str = request.request.get_first('User-Name')
             chap_id: str = request.request.get_first('CHAP-Password')[2:4]
@@ -84,6 +90,7 @@ def authenticate(req: HttpRequest):
                 else:
                     response.status = 0
 
+        # Handle PPPoE PAP authentication
         if auth_type == 'ppp-pap':
             user_id: str = request.request.get_first('User-Name')
             user_password: str = request.request.get_first('User-Password')
@@ -94,6 +101,7 @@ def authenticate(req: HttpRequest):
             else:
                 response.status = 0
 
+        # Lookup subscription based on known equipment
         if subscription is None and isinstance(equipment, AccountEquipment):
             subscriptions: QuerySet = AccountSubscription.objects.filter(equipment=equipment).order_by('-id')
             subscription: AccountSubscription | None = None
@@ -101,38 +109,48 @@ def authenticate(req: HttpRequest):
             if subscriptions.count():
                 subscription = subscriptions[0]
 
+        # Set the response status to reject if we don't have a subscription
         if subscription is None:
             response.status = 0
 
-        if response.status in pass_statuses:
+        # Proceed to build the response if the current response status is still passing and we have a subscription
+        if isinstance(subscription, AccountSubscription) and response.status in pass_statuses:
             response.status = 2
 
+            # DHCP Lease Time / PPPoE Session Timeout
             if isinstance(subscription.lease_time, int):
                 response.reply.add_only('Session-Timeout', str(subscription.lease_time))
 
+            # Static IP Address
             if isinstance(subscription.ipv4_address, str):
                 response.reply.add_only('Framed-IP-Address', subscription.ipv4_address)
                 response.reply.add_only('Framed-IP-Netmask', '255.255.255.0')
 
+            # Static IPv4 Address Pool
             if isinstance(subscription.ipv4_pool, str):
                 response.reply.add_only('Framed-Pool', subscription.ipv4_pool)
 
+            # Static IPv6 Prefix
             if isinstance(subscription.ipv6_prefix, str):
                 response.reply.add_only('Delegated-IPv6-Prefix', subscription.ipv6_prefix)
 
+            # Static IPv6 Prefix Pool
             if isinstance(subscription.ipv6_pool, str):
                 response.reply.add_only('Delegated-IPv6-Prefix-Pool', subscription.ipv6_pool)
 
+            # Static Network Routes
             if isinstance(subscription.routes, str):
-                response.reply.add('Framed-Route', subscription.routes)
+                routes: list = subscription.routes.split(',')
+                for route in routes:
+                    response.reply.add_only('Framed-Route', route)
 
+            # Package Throughput Limit
             if isinstance(subscription.package.downstream, float) \
                     and isinstance(subscription.package.upstream, float):
                 limit: str = f'{int(subscription.package.upstream)}/{int(subscription.package.downstream)}'
                 response.reply.add_only('Mikrotik-Rate-Limit', limit)
 
+        # Accounting Interval
         response.reply.add_only('Acct-Interim-Interval', '15')
 
-    params: dict = {'status': 200, 'content': response.dumps(), 'content_type': 'application/json'}
-
-    return HttpResponse(**params)
+    return HttpResponse(status=200, content=response.dumps(), content_type='application/json')
