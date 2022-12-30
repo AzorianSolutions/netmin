@@ -1,87 +1,66 @@
 import hashlib
-import json
-import pprint
 from django.http import HttpRequest, HttpResponse
+from radius.clients.freeradius.mutables import NetminRequest, NetminResponse
 
 
-def get_payload(request: HttpRequest) -> dict:
-    body: dict = json.loads(request.body.decode('UTF-8'))
-    payload: dict = {}
-
-    for key, value in body.items():
-        payload[key] = {}
-        if isinstance(value, list | tuple):
-            for item in value:
-                payload[key][item[0]] = item[1]
-
-    return payload
-
-
-def action_handler(request: HttpRequest, action: str = None):
+def action_handler(req: HttpRequest, action: str = None):
     print(f'RADIUS Action: {action}')
     print('This action is not currently being handled.')
-    payload: dict = get_payload(request)
-    print(payload)
+    request: NetminRequest = NetminRequest.loads(req.body.decode('UTF-8'))
+    print(request.json())
     return HttpResponse(status=204)
 
 
 def authenticate(req: HttpRequest):
     from django.db.models import QuerySet
     from accounts.models import AccountEquipment, AccountSubscription
-    from radius.clients.freeradius.mutables import NetminRequest, NetminResponse
 
     print(f'RADIUS Action: authenticate')
 
     auth_type: str | None = None
     key_map: dict = {
-        'dhcp': ['Agent-Remote-Id'],
+        'dhcp': ['User-Name', 'Agent-Remote-Id'],
         'ppp-chap': ['User-Name', 'CHAP-Challenge', 'CHAP-Password'],
         'ppp-pap': ['User-Name', 'User-Password'],
     }
-    payload: dict = get_payload(req)
     request: NetminRequest = NetminRequest.loads(req.body.decode('UTF-8'))
     response: NetminResponse = NetminResponse()
+    pass_statuses: list = [2, 3, 7, 8]
 
-    if 'request' not in payload:
-        response.status = 4
-    else:
-        for key, value in key_map.items():
-            valid: bool = True
-            for item in value:
-                if item not in payload['request']:
-                    valid = False
-                    break
-
-            if valid:
-                auth_type = key
+    for key, value in key_map.items():
+        valid: bool = True
+        for item in value:
+            if not request.request.has(item):
+                valid = False
                 break
+        if valid:
+            auth_type = key
+            break
 
     if auth_type is None:
         response.status = 4
 
-    if response.status in [2, 3, 7, 8]:
+    if response.status in pass_statuses:
         user_id: str | None = None
         equipment: AccountEquipment | None = None
         subscription: AccountSubscription | None = None
 
         if auth_type == 'dhcp':
-            user_id: str = str(payload['request']['Agent-Remote-Id']).upper().split('X')[1]
-            circuit_id: str = str(payload['request']['Agent-Circuit-Id']).upper().split('X')[1]
-            cpe_id: str = str(payload['request']['User-Name']).upper().replace(':', '')
+            user_id: str = request.request.get_first('Agent-Remote-Id').upper().split('X')[1]
+            cpe_id: str = request.request.get_first('User-Name').upper().replace(':', '')
 
-            print(f'   User ID: {user_id}')
-            print(f'Circuit ID: {circuit_id}')
-            print(f'    CPE ID: {cpe_id}')
+            registrations: QuerySet = AccountEquipment.objects.filter(mac_address=cpe_id)
+            if not registrations.count():
+                registrations = AccountEquipment.objects.filter(mac_address=user_id)
 
-            registrations: QuerySet = AccountEquipment.objects.filter(mac_address=user_id)
             if registrations.count():
                 equipment = registrations[0]
 
         if auth_type == 'ppp-chap':
-            user_id: str = str(payload['request']['User-Name'])
-            chap_id: str = str(payload['request']['CHAP-Password'])[2:4]
-            chap_password: str = payload['request']['CHAP-Password'][4:]
-            chap_challenge: str = str(payload['request']['CHAP-Challenge'])[2:]
+            user_id: str = request.request.get_first('User-Name')
+            chap_id: str = request.request.get_first('CHAP-Password')[2:4]
+            chap_password: str = request.request.get_first('CHAP-Password')[4:]
+            chap_challenge: str = request.request.get_first('CHAP-Challenge')[2:]
 
             print(f'              User ID: {user_id}')
             print(f'              CHAP ID: {chap_id}')
@@ -106,8 +85,8 @@ def authenticate(req: HttpRequest):
                     response.status = 0
 
         if auth_type == 'ppp-pap':
-            user_id: str = str(payload['request']['User-Name'])
-            user_password: str = str(payload['request']['User-Password'])
+            user_id: str = request.request.get_first('User-Name')
+            user_password: str = request.request.get_first('User-Password')
             subs: QuerySet = AccountSubscription.objects.filter(username=user_id, password=user_password) \
                 .order_by('-id')
             if subs.count():
@@ -115,7 +94,7 @@ def authenticate(req: HttpRequest):
             else:
                 response.status = 0
 
-        if isinstance(equipment, AccountEquipment):
+        if subscription is None and isinstance(equipment, AccountEquipment):
             subscriptions: QuerySet = AccountSubscription.objects.filter(equipment=equipment).order_by('-id')
             subscription: AccountSubscription | None = None
 
@@ -123,10 +102,9 @@ def authenticate(req: HttpRequest):
                 subscription = subscriptions[0]
 
         if subscription is None:
-            print(f'Could not find subscription for {user_id}')
             response.status = 0
-        else:
-            print(f'Found subscription for {user_id} with id {subscription.id}')
+
+        if response.status in pass_statuses:
             response.status = 2
 
             if isinstance(subscription.lease_time, int):

@@ -44,6 +44,9 @@ class NetminAttributeContainer:
             return self._attributes[key][-1]
         return None
 
+    def has(self, key: str) -> bool:
+        return key in self._attributes and len(self._attributes[key])
+
 
 class NetminPacket:
     config: NetminAttributeContainer = NetminAttributeContainer()
