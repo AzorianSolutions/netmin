@@ -1,6 +1,6 @@
 # Netmin
 
-A network access controller designed for freeRADIUS Mikrotik, and Cambium Networks solutions.
+A network access controller designed for freeRADIUS.
 
 ## Running the Application
 
