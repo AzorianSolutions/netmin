@@ -2,3 +2,4 @@
 venv
 db.sqlite3
 auth-examples.txt
+__pycache__

@@ -16,7 +16,7 @@ fi
 
 # Install Python3 if not already installed
 if [ "$(dpkg -l | awk '/python3/ {print }'|wc -l)" -lt 1 ]; then
-  $CMD_PREFIX apt update && $CMD_PREFIX apt install -y python3-venv
+  $CMD_PREFIX apt update && $CMD_PREFIX apt install -y python3
 else
   echo "Skipping Python3 installation, already installed."
 fi
