@@ -5,13 +5,13 @@ services:
   radius:
     image: azoriansolutions/freeradius-python3:latest
     restart: unless-stopped
-    #command: ['freeradius', '-X']
-    command: ['tail', '-f', '/dev/null']
+    command: ['freeradius', '-X']
+    #command: ['tail', '-f', '/dev/null']
     volumes:
-      - /home/matt/Projects/as/apps/netmin/conf/clients.conf:/etc/freeradius/3.0/clients.conf
-      - /home/matt/Projects/as/apps/netmin/conf/virtual-server.conf:/etc/freeradius/3.0/sites-enabled/netmin
-      - /home/matt/Projects/as/apps/netmin/conf/rlm_python3.conf:/etc/freeradius/3.0/mods-enabled/python3
-      - /home/matt/Projects/as/apps/netmin/src/radius/clients/freeradius:/etc/freeradius/3.0/mods-config/python3
+      - /srv/netmin/conf/clients.conf:/etc/freeradius/3.0/clients.conf
+      - /srv/netmin/conf/virtual-server.conf:/etc/freeradius/3.0/sites-enabled/netmin
+      - /srv/netmin/conf/rlm_python3.conf:/etc/freeradius/3.0/mods-enabled/python3
+      - /srv/netmin/src/radius/clients/freeradius:/etc/freeradius/3.0/mods-config/python3
     ports:
       - "1812:1812"
       - "1812:1812/udp"

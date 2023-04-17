@@ -3,3 +3,4 @@ venv
 db.sqlite3
 auth-examples.txt
 __pycache__
+__dump*
