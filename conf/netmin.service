@@ -1,0 +1,19 @@
+[Unit]
+Description = Netmin
+After=network-online.target
+
+[Service]
+PIDFile = /run/netmin/netmin.pid
+User = freerad
+Group = freerad
+WorkingDirectory = /srv/netmin
+ExecStartPre = /bin/mkdir /run/netmin
+ExecStartPre = /bin/chown -R freerad:freerad /run/netmin
+ExecStart = /usr/bin/env gunicorn src/netmin/wsgi.py -b 0.0.0.0:8080 --pid /run/netmin/netmin.pid
+ExecReload = /bin/kill -s HUP $MAINPID
+ExecStop = /bin/kill -s TERM $MAINPID
+ExecStopPost = /bin/rm -rf /run/netmin
+PrivateTmp = true
+
+[Install]
+WantedBy = multi-user.target
