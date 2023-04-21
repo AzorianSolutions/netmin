@@ -124,7 +124,8 @@ def authenticate(req: HttpRequest):
             # Static IP Address
             if isinstance(subscription.ipv4_address, str):
                 response.reply.add_only('Framed-IP-Address', subscription.ipv4_address)
-                response.reply.add_only('Framed-IP-Netmask', '255.255.255.0')
+                if auth_type == 'dhcp':
+                    response.reply.add_only('Framed-IP-Netmask', '255.255.255.0')
 
             # Static IPv4 Address Pool
             if isinstance(subscription.ipv4_pool, str):
