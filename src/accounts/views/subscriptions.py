@@ -25,6 +25,7 @@ def edit(request: HttpRequest, account_id: int, id: int | None = None):
             'status': request.POST.get('status'),
             'lease_time': lease_time,
             'ipv4_address': request.POST.get('ipv4_address'),
+            'ipv4_netmask': request.POST.get('ipv4_netmask'),
             'ipv4_pool': request.POST.get('ipv4_pool'),
             'ipv6_prefix': request.POST.get('ipv6_prefix'),
             'ipv6_pool': request.POST.get('ipv6_pool'),

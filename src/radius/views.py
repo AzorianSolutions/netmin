@@ -124,6 +124,20 @@ def authenticate(req: HttpRequest):
             # Static IP Address
             if isinstance(subscription.ipv4_address, str):
                 response.reply.add_only('Framed-IP-Address', subscription.ipv4_address)
+
+                # DHCP Netmask
+                if auth_type == 'dhcp' and isinstance(subscription.ipv4_netmask, int) \
+                        and 0 <= subscription.ipv4_netmask <= 32:
+                    import socket
+                    import struct
+
+                    bits: int = 32 - subscription.ipv4_netmask
+                    netmask: str = socket.inet_ntoa(struct.pack('!I', (1 << 32) - (1 << bits)))
+                    response.reply.add_only('Framed-IP-Netmask', netmask)
+
+            # Static IP Netmask
+            if isinstance(subscription.ipv4_address, str):
+                response.reply.add_only('Framed-IP-Address', subscription.ipv4_address)
                 if auth_type == 'dhcp':
                     response.reply.add_only('Framed-IP-Netmask', '255.255.255.0')
 

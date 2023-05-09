@@ -5,6 +5,7 @@ app_name = 'accounts'
 urlpatterns = [
     path('', index.index, name='index'),
     path('add', index.edit, name='accounts_add'),
+    path('import', index.import_accounts, name='accounts_import_customers'),
     path('<int:id>/edit', index.edit, name='accounts_edit'),
     path('<int:id>/delete', index.delete, name='accounts_delete'),
     path('<int:account_id>/locations/add', locations.edit, name='locations_add'),
