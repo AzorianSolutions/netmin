@@ -1,0 +1,168 @@
+{% extends 'layout/layout.jinja2' %}
+{% block title %}Subscribers / {{ record.subscriber.label }} / Delete Subscription{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><i class="fas fa-gauge-high"></i> Delete Subscription</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/subscribers">Subscribers</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/subscribers/{{ record.subscriber_id }}/edit#subscriptions">{{ record.subscriber.label }}</a>
+                            </li>
+                            <li class="breadcrumb-item active">Delete Subscription</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- /.content -->
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-row card-danger">
+
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Delete Subscription
+                                </h3>
+                                <div class="card-tools">
+                                    <button type="button" title="Cancel" class="btn btn-tool btn-cancel"><i
+                                            class="fas fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <form action="" method="post">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+
+                                <div class="card-body">
+                                    <h2>Are you sure?</h2>
+                                    <p>Are you absolutely sure you want to <strong>delete this subscription?</strong>
+                                    </p>
+                                    <div class="card card-secondary">
+                                        <div class="card-header">
+                                            <h3 class="card-title">
+                                                {{ record.equipment.location.label }} / {{ record.equipment.label }} / {{ record.package.label }}
+                                            </h3>
+                                        </div>
+                                        <!-- /.card-header -->
+
+                                        <div class="card-body">
+                                            <dl class="row">
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Equipment</dt>
+                                                    <dd class="col-sm-8">{{ record.equipment.label }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Package</dt>
+                                                    <dd class="col-sm-8">{{ record.package.label }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Status</dt>
+                                                    <dd class="col-sm-8">{{ record.status }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Lease Time</dt>
+                                                    <dd class="col-sm-8">{{ record.lease_time | none_value }}</dd>
+                                                </div>
+                                            </dl>
+                                            <dl class="row">
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">IPv4 Address</dt>
+                                                    <dd class="col-sm-8">{{ record.ipv4_address | none_value }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">IPv4 Pool</dt>
+                                                    <dd class="col-sm-8">{{ record.ipv4_pool | none_value }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">IPv6 Prefix</dt>
+                                                    <dd class="col-sm-8">{{ record.ipv6_prefix | none_value }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">IPv6 Pool</dt>
+                                                    <dd class="col-sm-8">{{ record.ipv6_pool | none_value }}</dd>
+                                                </div>
+                                            </dl>
+                                            <dl class="row">
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-5">Network Routes</dt>
+                                                    <dd class="col-sm-7">{{ record.routes | none_value }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Username</dt>
+                                                    <dd class="col-sm-8">{{ record.username | none_value }}</dd>
+                                                </div>
+                                                <div class="col col-3">
+                                                    <dt class="col-sm-4">Password</dt>
+                                                    <dd class="col-sm-8">{{ record.password | none_value }}</dd>
+                                                </div>
+                                            </dl>
+                                        </div>
+                                        <!-- /.card-body -->
+
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit" title="Delete Subscription" class="btn btn-danger">Delete Subscription
+                                    </button>
+                                    <button type="button" title="Cancel" class="btn btn-primary btn-cancel float-right">
+                                        Cancel
+                                    </button>
+                                </div>
+                                <!-- /.card-footer -->
+
+                            </form>
+
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block footer_scripts %}
+    <script type="text/javascript">
+        let baseURI = '/subscribers/{{ record.subscriber_id }}/edit#subscriptions'
+        let btnCancel = null
+
+        let onBtnCancelClick = function (e) {
+            window.location = baseURI
+        }
+
+        let setupListeners = function () {
+            btnCancel.bind('click', onBtnCancelClick)
+        }
+
+        $(function () {
+            btnCancel = $('.btn-cancel')
+            setupListeners()
+        })
+    </script>
+{% endblock %}

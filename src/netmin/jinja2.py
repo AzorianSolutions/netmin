@@ -2,7 +2,7 @@ from django.templatetags.static import static
 from django.urls import reverse
 from inspect import getmembers, isfunction
 from jinja2 import Environment
-from netmin.lib import jinja_filters, jinja_tests
+from lib import jinja_filters, jinja_tests
 
 
 class JinjaEnvironment(Environment):

@@ -1,0 +1,250 @@
+{% extends 'layout/layout.jinja2' %}
+{% block title %}Subscribers / {{ record.subscriber.label }} / {{ id | action_label }} Location{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><i class="fas fa-location-dot"></i> {{ id | action_label }} Location</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/subscribers">Subscribers</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/subscribers/{{ record.subscriber_id }}/edit#locations">{{ record.subscriber.label }}</a>
+                            </li>
+                            <li class="breadcrumb-item active">{{ id | action_label }} Location</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- /.content -->
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-row card-secondary">
+
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Location Details
+                                </h3>
+                                <div class="card-tools">
+                                    <button type="button" title="Cancel" class="btn btn-tool btn-cancel"><i
+                                            class="fas fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <form id="frmEdit" action="" method="post">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+                                <div class="card-body">
+
+                                    <div class="form-group">
+                                        <label for="txtLabel">Label</label>
+                                        <input type="text" class="form-control" id="txtLabel" name="label"
+                                               placeholder="Location Label"
+                                               value="{% if record.label %}{{ record.label }}{% endif %}">
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="form-group">
+                                        <label for="selType">Location Type</label>
+                                        <select class="form-control" id="selType" name="type">
+                                            <option value="">Select a type...</option>
+                                            {% for item in record.TYPES %}
+                                                <option value="{{ item }}"{% if record.type == item %}
+                                                        selected{% endif %}>{{ record.TYPES[item] }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <!-- /.form-group -->
+
+                                    <div class="row">
+
+                                        <div class="col col-3">
+                                            <div class="form-group">
+                                                <label for="txtAddressLine1">Street Address Line 1</label>
+                                                <input type="text" class="form-control" id="txtAddressLine1"
+                                                       name="address_line1"
+                                                       value="{% if record.address_line1 %}{{ record.address_line1 }}{% endif %}"
+                                                       placeholder="Street Address Line 1"/>
+                                            </div>
+                                            <!-- /.form-group -->
+                                        </div>
+                                        <!-- /.col -->
+
+                                        <div class="col col-3">
+                                            <div class="form-group">
+                                                <label for="txtAddressLine2">Street Address Line 2</label>
+                                                <input type="text" class="form-control" id="txtAddressLine2"
+                                                       name="address_line2"
+                                                       value="{% if record.address_line2 %}{{ record.address_line2 }}{% endif %}"
+                                                       placeholder="Street Address Line 2"/>
+                                            </div>
+                                            <!-- /.form-group -->
+                                        </div>
+                                        <!-- /.col -->
+
+                                        <div class="col col-3">
+                                            <div class="form-group">
+                                                <label for="txtAddressCity">City</label>
+                                                <input type="text" class="form-control" id="txtAddressCity"
+                                                       name="address_city"
+                                                       value="{% if record.address_city %}{{ record.address_city }}{% endif %}"
+                                                       placeholder="City / Town"/>
+                                            </div>
+                                            <!-- /.form-group -->
+                                        </div>
+                                        <!-- /.col -->
+
+                                        <div class="col col-3">
+                                            <div class="form-group">
+                                                <label for="txtAddressState">State</label>
+                                                <input type="text" class="form-control" id="txtAddressState"
+                                                       name="address_state"
+                                                       value="{% if record.address_state %}{{ record.address_state }}{% endif %}"
+                                                       placeholder="State"/>
+                                            </div>
+                                            <!-- /.form-group -->
+                                        </div>
+                                        <!-- /.col -->
+
+                                        <div class="col col-3">
+                                            <div class="form-group">
+                                                <label for="txtAddressPostalCode">Postal Code</label>
+                                                <input type="text" class="form-control" id="txtAddressPostalCode"
+                                                       name="address_postal_code"
+                                                       value="{% if record.address_postal_code %}{{ record.address_postal_code }}{% endif %}"
+                                                       placeholder="Postal Code"/>
+                                            </div>
+                                            <!-- /.form-group -->
+                                        </div>
+                                        <!-- /.col -->
+
+                                        <div class="col col-3">
+                                            <div class="form-group">
+                                                <label for="txtAddressCountry">Country</label>
+                                                <input type="text" class="form-control" id="txtAddressCountry"
+                                                       name="address_country"
+                                                       value="{% if record.address_country %}{{ record.address_country }}{% endif %}"
+                                                       placeholder="Country"/>
+                                            </div>
+                                            <!-- /.form-group -->
+                                        </div>
+                                        <!-- /.col -->
+
+                                    </div>
+                                    <!-- /.row -->
+
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit"
+                                            title="{{ id | action_label }} Location"
+                                            class="btn btn-primary">{{ id | action_label }}</button>
+                                    <button type="button" title="Cancel"
+                                            class="btn btn-danger float-right btn-cancel">Cancel</button>
+                                </div>
+                                <!-- /.card-footer -->
+
+                            </form>
+                            <!-- /form -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block footer_scripts %}
+    <script type="text/javascript">
+        let baseURI = '/subscribers/{{ record.subscriber_id }}'
+        let btnCancel = null
+        let frmEdit = null
+
+        let onBtnCancelClick = function (e) {
+            window.location = baseURI + '/edit#locations'
+        }
+
+        let setupListeners = function () {
+            btnCancel.bind('click', onBtnCancelClick)
+        }
+
+        let setupValidation = function () {
+            frmEdit.validate({
+                rules: {
+                    label: {
+                        required: true,
+                        minlength: 1,
+                        maxlength: 100,
+                        label: true,
+                    },
+                    type: {
+                        required: true,
+                    },
+                    address_line1: {
+                        required: true,
+                        minlength: 6,
+                        maxlength: 100,
+                    },
+                    address_line2: {
+                        required: false,
+                        minlength: 1,
+                        maxlength: 100,
+                    },
+                    address_city: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 50,
+                    },
+                    address_state: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 2,
+                    },
+                    address_postal_code: {
+                        required: true,
+                        minlength: 5,
+                        maxlength: 10,
+                        zipcode: true,
+                    },
+                    address_country: {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 2,
+                    },
+                },
+                errorPlacement: validateErrorPlacement,
+            })
+        }
+
+        $(function () {
+            btnCancel = $('.btn-cancel')
+            frmEdit = $('#frmEdit')
+            setupListeners()
+            setupValidation()
+        })
+    </script>
+{% endblock %}

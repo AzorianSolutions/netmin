@@ -1,0 +1,160 @@
+{% extends 'layout/layout.jinja2' %}
+{% block title %}Accounts{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><i class="fas fa-key"></i> Manage Subscribers</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">Subscribers</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- /.content -->
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-row card-secondary">
+
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Subscriber Records
+                                </h3>
+                                <div class="card-tools">
+                                    <button type="button" title="Create Account" class="btn btn-tool btn-add"><i
+                                            class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <div class="card-body">
+                                <table id="records" class="table table-hover table-bordered table-striped text-nowrap records">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Primary Contact</th>
+                                        <th>Secondary Contact</th>
+                                        <th>Organization</th>
+                                        <th>Notes</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Primary Contact</th>
+                                        <th>Secondary Contact</th>
+                                        <th>Organization</th>
+                                        <th>Notes</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    <tr>
+                                        <td colspan="6">No data has been loaded yet.</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block html_head %}
+    <style type="text/css">
+        table.records th:nth-child(0n+2), table.records th:nth-child(0n+3), table.records th:nth-child(0n+4) {
+            width: 225px;
+        }
+    </style>
+{% endblock %}
+
+{% block footer_scripts %}
+    <script type="text/javascript">
+        let csrf_token = '{{ csrf_token }}'
+        let baseURI = '/subscribers'
+        let btnAdd = null
+        let btnEdit = null
+        let btnDelete = null
+
+        let onBtnAddClick = function (e) {
+            window.location = baseURI + '/add'
+        }
+
+        let onBtnEditClick = function (e) {
+            let accountId = getRootElement(e.target, 'button').data('id')
+            window.location = baseURI + '/' + accountId + '/edit'
+        }
+
+        let onBtnDeleteClick = function (e) {
+            let accountId = getRootElement(e.target, 'button').data('id')
+            window.location = baseURI + '/' + accountId + '/delete'
+        }
+
+        let setupListeners = function () {
+            btnAdd = $('.btn-add')
+            btnEdit = $('.btn-edit')
+            btnDelete = $('.btn-delete')
+            btnAdd.bind('click', onBtnAddClick)
+            btnEdit.bind('click', onBtnEditClick)
+            btnDelete.bind('click', onBtnDeleteClick)
+        }
+
+        let setupDataTables = function (callback) {
+            $('#records').spnRecordList({
+                url: baseURI + '/api/search',
+                csrf_token: csrf_token,
+                columns: [
+                    {"data": "id"},
+                    {"data": "primary_contact_name"},
+                    {"data": "secondary_contact_name"},
+                    {"data": "org_name"},
+                    {"data": "notes"},
+                    {
+                        "data": "id",
+                        "orderable": false,
+                        render: function (data, type, row) {
+                            return '<button type="button" title="Edit Account" data-id="' + row.id + '"'
+                                + 'class="btn btn-default btn-outline-secondary btn-sm btn-edit">'
+                                + '<i class="fa fa-edit"></i></button>'
+                                + '<button type="button" title="Delete Account" data-id="' + row.id + '"'
+                                + 'class="btn btn-default btn-outline-secondary btn-sm btn-delete">'
+                                + '<i class="fa fa-trash"></i></button>'
+                        }
+                    }
+                ]
+            }, callback)
+        }
+
+        $(function () {
+            setupDataTables(setupListeners)
+        })
+    </script>
+{% endblock %}

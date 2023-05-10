@@ -1,0 +1,344 @@
+{% extends 'layout/layout.jinja2' %}
+{% block title %}Subscribers / {{ record.subscriber.label }} / {{ id | action_label }} Subscription{% endblock %}
+
+{% block content %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1><i class="fas fa-gauge-high"></i> {{ id | action_label }} Subscription</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="/">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/subscribers">Subscribers</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="/subscribers/{{ record.subscriber_id }}/edit#subscriptions">{{ record.subscriber.label }}</a>
+                            </li>
+                            <li class="breadcrumb-item active">{{ id | action_label }} Subscription</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- /.content -->
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-row card-secondary shadow">
+
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    Subscription Management
+                                </h3>
+                                <div class="card-tools">
+                                    <button type="button" title="Cancel" class="btn btn-tool btn-cancel"><i
+                                        class="fas fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+
+                            <form id="frmEdit" action="" method="post">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"/>
+                                <div class="card-body">
+
+                                    <div class="row">
+                                        <div class="col-12 col-md-6">
+                                            <div class="card card-row card-primary shadow">
+
+                                                <div class="card-header">
+                                                    <h3 class="card-title">
+                                                        Subscription Settings
+                                                    </h3>
+                                                </div>
+                                                <!-- /.card-header -->
+
+                                                <div class="card-body">
+
+                                                    <div class="form-group">
+                                                        <label for="selEquipment">Equipment</label>
+                                                        <select class="form-control" id="selEquipment"
+                                                                name="equipment_id">
+                                                            <option value="">Select equipment...</option>
+                                                            {% for item in equipment %}
+                                                                <option
+                                                                    value="{{ item.id }}" {{ item.id | selected(record.equipment_id) }}>{{ item.label }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="selPackage">Service Package</label>
+                                                        <select class="form-control" id="selPackage" name="package_id">
+                                                            <option value="">Select a package...</option>
+                                                            {% for item in packages %}
+                                                                <option
+                                                                    value="{{ item.id }}" {{ item.id | selected(record.package_id) }}>{{ item.label }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="selStatus">Subscription Status</label>
+                                                        <select class="form-control" id="selStatus" name="status">
+                                                            <option value="">Select a status...</option>
+                                                            {% for item in record.STATUSES %}
+                                                                <option
+                                                                    value="{{ item }}" {{ item | selected(record.status) }}>{{ record.STATUSES[item] }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                </div>
+                                                <!-- /.card-body -->
+
+                                            </div>
+                                            <!-- /.card -->
+
+                                            <div class="card card-row card-secondary shadow">
+
+                                                <div class="card-header">
+                                                    <h3 class="card-title">
+                                                        PPPoE Settings
+                                                    </h3>
+                                                </div>
+                                                <!-- /.card-header -->
+
+                                                <div class="card-body">
+
+                                                    <div class="form-group">
+                                                        <label for="txtUsername">Username</label>
+                                                        <input type="text" class="form-control" id="txtUsername"
+                                                               name="username"
+                                                               placeholder="Must be globally unique!"
+                                                               value="{{ record.username | no_value }}">
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="txtPassword">Password</label>
+                                                        <input type="text" class="form-control" id="txtPassword"
+                                                               name="password"
+                                                               value="{{ record.password | no_value }}">
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                </div>
+                                                <!-- /.card-body -->
+                                            </div>
+                                            <!-- /.card -->
+
+                                        </div>
+                                        <!-- /.col -->
+                                        <div class="col-12 col-md-6">
+                                            <div class="card card-row card-secondary shadow">
+
+                                                <div class="card-header">
+                                                    <h3 class="card-title">
+                                                        Network Settings
+                                                    </h3>
+                                                </div>
+                                                <!-- /.card-header -->
+
+                                                <div class="card-body">
+
+                                                    <div class="form-group">
+                                                        <label for="txtLeaseTime">Lease Time</label>
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" id="txtLeaseTime" name="lease_time"
+                                                                   class="form-control" placeholder="86400"
+                                                                   value="{{ record.lease_time | no_value }}">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">seconds</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="txtIPv4Address">IPv4 Address</label>
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" id="txtIPv4Address" name="ipv4_address"
+                                                                   class="form-control" placeholder="1.1.1.1"
+                                                                   value="{{ record.ipv4_address | no_value }}">
+                                                            <div class="input-group-append">
+                                                                <span class="input-group-text">/</span>
+                                                            </div>
+                                                            <input type="text" id="txtIPv4Netmask" name="ipv4_netmask"
+                                                                   class="form-control" placeholder="24"
+                                                                   value="{{ record.ipv4_netmask | no_value }}">
+                                                        </div>
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="txtIPv4Pool">IPv4 Pool</label>
+                                                        <input type="text" class="form-control" id="txtIPv4Pool"
+                                                               name="ipv4_pool"
+                                                               placeholder="subscribers"
+                                                               value="{{ record.ipv4_pool | no_value }}">
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="txtIPv6Prefix">IPv6 Prefix</label>
+                                                        <input type="text" class="form-control" id="txtIPv6Prefix"
+                                                               name="ipv6_prefix"
+                                                               placeholder="2606:4700:4700::/64"
+                                                               value="{{ record.ipv6_prefix | no_value }}">
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="txtIPv6Pool">IPv6 Pool</label>
+                                                        <input type="text" class="form-control" id="txtIPv6Pool"
+                                                               name="ipv6_pool"
+                                                               placeholder="subscribers"
+                                                               value="{{ record.ipv6_pool | no_value }}">
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="txtRoutes">Network Routes</label>
+                                                        <textarea placeholder="123.231.213.144/29"
+                                                                  class="form-control" rows="3"
+                                                                  id="txtRoutes"
+                                                                  name="routes">{{ record.routes | no_value }}</textarea>
+                                                        <p>* Separate with commas or new lines</p>
+                                                    </div>
+                                                    <!-- /.form-group -->
+
+                                                </div>
+                                                <!-- /.card-body -->
+
+                                            </div>
+                                            <!-- /.card -->
+                                        </div>
+                                        <!-- /.col -->
+                                    </div>
+                                    <!-- /.row -->
+
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit"
+                                            title="{{ id | action_label }} Subscription"
+                                            class="btn btn-primary">{{ id | action_label }}</button>
+                                    <button type="button" title="Cancel"
+                                            class="btn btn-danger float-right btn-cancel">Cancel
+                                    </button>
+                                </div>
+                                <!-- /.card-footer -->
+
+                            </form>
+                            <!-- /form -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+            </div><!-- /.container-fluid -->
+        </section>
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block footer_scripts %}
+    <script type="text/javascript">
+        let baseURI = '/subscribers/{{ record.subscriber_id }}'
+        let btnCancel = null
+        let frmEdit = null
+
+        let onBtnCancelClick = function (e) {
+            window.location = baseURI + '/edit#subscriptions'
+        }
+
+        let setupListeners = function () {
+            btnCancel.bind('click', onBtnCancelClick)
+        }
+
+        let setupValidation = function () {
+            frmEdit.validate({
+                rules: {
+                    equipment_id: {
+                        required: true,
+                    },
+                    package_id: {
+                        required: true,
+                    },
+                    status: {
+                        required: true,
+                    },
+                    lease_time: {
+                        required: false,
+                        number: true,
+                        range: [30, 604800],
+                    },
+                    ipv4_address: {
+                        required: false,
+                        ipv4address: true,
+                        maxlength: 39,
+                    },
+                    ipv4_netmask: {
+                        required: true,
+                        number: true,
+                        range: [1, 32],
+                    },
+                    ipv4_pool: {
+                        required: false,
+                        maxlength: 50,
+                    },
+                    ipv6_prefix: {
+                        required: false,
+                        maxlength: 39,
+                        ipv6prefix: true,
+                    },
+                    ipv6_pool: {
+                        required: false,
+                        maxlength: 50,
+                    },
+                    routes: {
+                        required: false,
+                        maxlength: 1000,
+                    },
+                    username: {
+                        required: false,
+                        minlength: 3,
+                        maxlength: 50,
+                    },
+                    password: {
+                        required: false,
+                        minlength: 5,
+                        maxlength: 50,
+                    },
+                },
+                errorPlacement: validateErrorPlacement,
+            })
+        }
+
+        $(function () {
+            btnCancel = $('.btn-cancel')
+            frmEdit = $('#frmEdit')
+            setupListeners()
+            setupValidation()
+        })
+    </script>
+{% endblock %}
