@@ -7,12 +7,12 @@
     <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin, radius, freeradius, acl, network, access">
     <link rel="icon" type="image/x-icon" href="{{ static('img/favcon/favicon.ico') }}">
     <title>Netmin - {% block title %}{% endblock %}</title>
-    {% include 'layout/head-styles.jinja2' %}
+    {% include 'layouts/register/head-styles.jinja2' %}
     {% block html_head %}{% endblock %}
 </head>
-<body class="login-page" style="min-height: 466px;">
+<body class="register-page" style="min-height: 542px;">
 {% block content %}{% endblock %}
-{% include 'layout/footer-scripts.jinja2' %}
+{% include 'layouts/register/footer-scripts.jinja2' %}
 {% block footer_scripts scoped %}{% endblock %}
 </body>
 </html>

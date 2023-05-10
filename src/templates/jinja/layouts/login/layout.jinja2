@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="A network access controller designed for freeRADIUS.">
+    <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin, radius, freeradius, acl, network, access">
+    <link rel="icon" type="image/x-icon" href="{{ static('img/favcon/favicon.ico') }}">
+    <title>Netmin - {% block title %}{% endblock %}</title>
+    {% include 'layouts/login/head-styles.jinja2' %}
+    {% block html_head %}{% endblock %}
+</head>
+<body class="login-page" style="min-height: 466px;">
+{% block content %}{% endblock %}
+{% include 'layouts/login/footer-scripts.jinja2' %}
+{% block footer_scripts scoped %}{% endblock %}
+</body>
+</html>
